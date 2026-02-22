@@ -45,3 +45,4 @@ To sync data to GitHub Pages:
 ---
 
 *Built by Jarvis for tracking AI interaction patterns.* 🤖
+# jarvis-dashboard
