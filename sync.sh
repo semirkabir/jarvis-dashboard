@@ -13,8 +13,8 @@ cd "$DASHBOARD_DIR"
 git add request-log.json
 git diff --quiet && git diff --staged --quiet || git commit -m "Update request-log.json - $(date '+%Y-%m-%d %H:%M:%S')"
 
-# Push to GitHub (replace with your username)
-# Uncomment the line below after adding your remote:
-# git push origin main
+# Push to GitHub
+git push origin main
 
-echo "Dashboard data synced locally. Run 'git push origin main' to update GitHub Pages."
+echo "Dashboard data synced and pushed to GitHub Pages!"
+echo "View at: https://semirkabir.github.io/jarvis-dashboard/"
