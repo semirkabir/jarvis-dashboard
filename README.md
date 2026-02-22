@@ -5,7 +5,7 @@ Task request visualization dashboard for tracking AI interactions.
 ## Live Dashboard
 
 Access the live dashboard at:
-**https://semirss.github.io/jarvis-dashboard/**
+**https://semirkabir.github.io/jarvis-dashboard/**
 
 ## Features
 
@@ -33,7 +33,7 @@ Access the live dashboard at:
 The dashboard reads from `request-log.json`. On the server (VPS), this file is automatically updated when you send requests.
 
 To sync data to GitHub Pages:
-1. On the VPS: `scp request-log.json semirss.github.io/jarvis-dashboard/` (or similar)
+1. Run `bash sync.sh` in this directory
 2. Or set up a cron job to auto-sync
 
 ## Setup
