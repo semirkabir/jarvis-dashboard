@@ -10,54 +10,144 @@
             font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
             background: #0a0e17;
             color: #e2e8f0;
-            padding: 1rem;
-            line-height: 1.5;
+            overflow: hidden;
+            height: 100vh;
         }
-        .container { max-width: 1600px; margin: 0 auto; }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Left Sidebar - Navigation */
+        .left-sidebar {
+            width: 60px;
+            background: #111827;
+            border-right: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+            transition: width 0.3s ease;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        .left-sidebar.expanded {
+            width: 220px;
+        }
+        .sidebar-toggle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1f2937;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+        .sidebar-toggle:hover { background: #374151; }
+        .nav-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 0.25rem 0.5rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .nav-item:hover { background: #1f2937; }
+        .nav-item.active { background: #3b82f6; color: white; }
+        .nav-icon { font-size: 1.25rem; min-width: 30px; }
+        .nav-label {
+            font-size: 0.85rem;
+            margin-left: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .left-sidebar.expanded .nav-label { opacity: 1; }
+        .nav-divider {
+            height: 1px;
+            background: #1f2937;
+            width: 80%;
+            margin: 0.5rem auto;
+        }
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
         /* Header */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
             padding: 1rem 1.5rem;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 8px;
-            border: 1px solid #334155;
+            border-bottom: 1px solid #334155;
+            flex-shrink: 0;
         }
         .header-left { display: flex; align-items: center; gap: 1rem; }
         .status-dot {
-            width: 12px; height: 12px;
+            width: 10px; height: 10px;
             background: #22c55e;
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
         }
         .header h1 {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             color: #60a5fa;
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
-        .header-right { text-align: right; }
-        .uptime { color: #94a3b8; font-size: 0.85rem; }
-        .last-sync { color: #64748b; font-size: 0.75rem; }
+        .header-right { display: flex; align-items: center; gap: 1rem; }
+        .page-title { font-size: 0.85rem; color: #94a3b8; }
+        .chat-toggle {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.25rem;
+        }
+        .chat-toggle:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
 
-        /* Mission Control Grid */
-        .mc-grid {
+        /* Page Content */
+        .page-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
             margin-bottom: 1rem;
         }
-        @media (max-width: 1200px) { .mc-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { .mc-grid { grid-template-columns: 1fr; } }
-
-        /* Panels */
         .panel {
             background: #111827;
             padding: 1rem;
@@ -73,7 +163,7 @@
             border-bottom: 1px solid #1f2937;
         }
         .panel-title {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -82,7 +172,7 @@
             gap: 0.5rem;
         }
         .panel-badge {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
             background: #1f2937;
@@ -92,11 +182,84 @@
         .panel-badge.warning { background: #f59e0b; color: #78350f; }
         .panel-badge.error { background: #ef4444; color: #7f1d1d; }
 
-        /* Status Indicators */
-        .status-row {
+        /* Task Board Styles */
+        .board-container {
+            display: flex;
+            gap: 1rem;
+            height: calc(100vh - 140px);
+            overflow-x: auto;
+        }
+        .board-column {
+            flex: 1;
+            min-width: 300px;
+            background: #111827;
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+        }
+        .board-header {
+            padding: 1rem;
+            border-bottom: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .board-title {
+            font-size: 0.85rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+        }
+        .board-count {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            background: #1f2937;
+            color: #64748b;
+        }
+        .board-tasks {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem;
+        }
+        .task-card {
+            background: #1e293b;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
+            margin-bottom: 0.75rem;
+            cursor: grab;
+        }
+        .task-card.scheduled { border-left-color: #f59e0b; }
+        .task-card.completed { border-left-color: #22c55e; opacity: 0.7; }
+        .task-card:hover { transform: translateX(4px); }
+        .task-title { font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .task-meta {
+            display: flex;
             justify-content: space-between;
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        .task-category { padding: 0.1rem 0.4rem; border-radius: 3px; background: #1f2937; }
+
+        /* System Status Page */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .status-card {
+            background: #111827;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+        }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 0.5rem 0;
             border-bottom: 1px solid #1f2937;
         }
@@ -106,6 +269,127 @@
         .status-value.online { color: #22c55e; }
         .status-value.offline { color: #ef4444; }
         .status-value.pending { color: #f59e0b; }
+
+        /* Right Sidebar - Chat */
+        .right-sidebar {
+            width: 0;
+            background: #111827;
+            border-left: 1px solid #1f2937;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .right-sidebar.expanded {
+            width: 380px;
+        }
+        .chat-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .chat-info h3 { font-size: 0.9rem; color: white; }
+        .chat-info span { font-size: 0.7rem; color: rgba(255,255,255,0.7); }
+        .chat-close {
+            margin-left: auto;
+            cursor: pointer;
+            font-size: 1.25rem;
+            opacity: 0.7;
+        }
+        .chat-close:hover { opacity: 1; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .message.user { flex-direction: row-reverse; }
+        .message-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .message.jarvis .message-avatar { background: #6366f1; }
+        .message.user .message-avatar { background: #3b82f6; }
+        .message-content {
+            max-width: 80%;
+            padding: 0.6rem 0.85rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        .message.jarvis .message-content {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 12px 12px 12px 4px;
+        }
+        .message.user .message-content {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-radius: 12px 12px 4px 12px;
+        }
+        .message-time {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+        .message.user .message-time { text-align: right; }
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid #1f2937;
+        }
+        .chat-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input-wrapper input {
+            flex: 1;
+            background: #1e293b;
+            border: 1px solid #1f2937;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        .chat-input-wrapper input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .chat-send {
+            width: 36px;
+            height: 36px;
+            background: #6366f1;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .chat-send:hover { background: #8b5cf6; }
 
         /* Metric Cards */
         .metric-grid {
@@ -122,12 +406,12 @@
         .metric-card.success { border-left-color: #22c55e; }
         .metric-card.warning { border-left-color: #f59e0b; }
         .metric-card.danger { border-left-color: #ef4444; }
-        .metric-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
-        .metric-value { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; }
-        .metric-sub { font-size: 0.7rem; color: #64748b; margin-top: 0.25rem; }
+        .metric-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
+        .metric-value { font-size: 1.1rem; font-weight: 700; color: #e2e8f0; }
+        .metric-sub { font-size: 0.65rem; color: #64748b; margin-top: 0.25rem; }
 
-        /* Activity Timeline */
-        .timeline { max-height: 300px; overflow-y: auto; }
+        /* Timeline */
+        .timeline { max-height: 250px; overflow-y: auto; }
         .timeline-item {
             display: flex;
             gap: 0.75rem;
@@ -147,38 +431,10 @@
             background: #3b82f6;
             border-radius: 50%;
         }
-        .timeline-item.completed::before { background: #22c55e; }
-        .timeline-item.pending::before { background: #f59e0b; }
-        .timeline-item.error::before { background: #ef4444; }
-        .timeline-time { font-size: 0.7rem; color: #64748b; min-width: 70px; }
-        .timeline-content { flex: 1; }
-        .timeline-text { font-size: 0.85rem; color: #e2e8f0; }
-        .timeline-meta { font-size: 0.7rem; color: #64748b; margin-top: 0.25rem; }
+        .timeline-time { font-size: 0.7rem; color: #64748b; min-width: 60px; }
+        .timeline-text { font-size: 0.8rem; color: #e2e8f0; }
 
-        /* Cron Job List */
-        .cron-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            background: #1e293b;
-            border-radius: 4px;
-            margin-bottom: 0.5rem;
-        }
-        .cron-icon { font-size: 1.2rem; }
-        .cron-info { flex: 1; }
-        .cron-name { font-size: 0.85rem; color: #e2e8f0; font-weight: 600; }
-        .cron-schedule { font-size: 0.7rem; color: #64748b; }
-        .cron-status {
-            font-size: 0.65rem;
-            padding: 0.1rem 0.4rem;
-            border-radius: 3px;
-            background: #22c55e;
-            color: #064e3b;
-        }
-        .cron-status.inactive { background: #64748b; color: #f1f5f9; }
-
-        /* Alerts Panel */
+        /* Alerts */
         .alert-item {
             display: flex;
             align-items: flex-start;
@@ -192,59 +448,6 @@
         .alert-item.critical { border-left-color: #ef4444; background: #1f1d1d; }
         .alert-item.warning { border-left-color: #f59e0b; }
         .alert-item.info { border-left-color: #3b82f6; }
-        .alert-icon { font-size: 1rem; }
-        .alert-text { font-size: 0.8rem; color: #e2e8f0; }
-        .alert-time { font-size: 0.65rem; color: #64748b; }
-
-        /* Quick Actions */
-        .quick-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .quick-btn {
-            font-family: inherit;
-            font-size: 0.75rem;
-            padding: 0.4rem 0.75rem;
-            background: #1e293b;
-            color: #e2e8f0;
-            border: 1px solid #374151;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .quick-btn:hover { background: #334155; border-color: #475569; }
-        .quick-btn.primary { background: #3b82f6; border-color: #2563eb; color: #fff; }
-        .quick-btn.primary:hover { background: #2563eb; }
-        .quick-btn.danger { background: #ef4444; border-color: #dc2626; color: #fff; }
-        .quick-btn.danger:hover { background: #dc2626; }
-
-        /* Category Pills */
-        .category-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            background: #1e293b;
-            color: #e2e8f0;
-        }
-        .category-pill::before {
-            content: '';
-            width: 8px; height: 8px;
-            border-radius: 50%;
-        }
-        .category-pill.analysis::before { background: #10b981; }
-        .category-pill.writing::before { background: #3b82f6; }
-        .category-pill.technical::before { background: #8b5cf6; }
-        .category-pill.reminders::before { background: #f59e0b; }
-        .category-pill.research::before { background: #ec4899; }
-        .category-pill.conversation::before { background: #6366f1; }
-        .category-pill.markets::before { background: #14b8a6; }
-        .category-pill.heartbeat::before { background: #64748b; }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
         /* Empty State */
         .empty-state {
@@ -254,9 +457,15 @@
         }
         .empty-state .icon { font-size: 2rem; margin-bottom: 0.5rem; }
 
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
         /* Progress Bar */
         .progress-bar {
-            height: 4px;
+            height: 3px;
             background: #1f2937;
             border-radius: 2px;
             overflow: hidden;
@@ -266,230 +475,458 @@
             height: 100%;
             background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
             border-radius: 2px;
-            transition: width 0.3s ease;
+        }
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        .category-pill::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+        }
+        .category-pill.analysis::before { background: #10b981; }
+        .category-pill.writing::before { background: #3b82f6; }
+        .category-pill.technical::before { background: #8b5cf6; }
+        .category-pill.markets::before { background: #14b8a6; }
+
+        /* Cron Items */
+        .cron-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem;
+            background: #1e293b;
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+        }
+        .cron-icon { font-size: 0.9rem; }
+        .cron-info { flex: 1; }
+        .cron-name { font-size: 0.75rem; color: #e2e8f0; font-weight: 600; }
+        .cron-schedule { font-size: 0.65rem; color: #64748b; }
+        .cron-status {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            background: #22c55e;
+            color: #064e3b;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left">
-                <div class="status-dot" id="systemStatus"></div>
-                <h1>🤖 Jarvis Mission Control</h1>
-            </div>
-            <div class="header-right">
-                <div class="uptime" id="uptime">Uptime: --</div>
-                <div class="last-sync" id="lastSync">Last sync: --</div>
-            </div>
-        </div>
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
 
-        <!-- Main Grid -->
-        <div class="mc-grid">
-            <!-- System Status Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">⚡ System Status</div>
-                    <span class="panel-badge active">ONLINE</span>
-                </div>
-                <div id="systemStatusList"></div>
+            <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
             </div>
 
-            <!-- Quick Stats Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">📊 Quick Stats</div>
-                    <span class="panel-badge" id="statCount">0 requests</span>
-                </div>
-                <div class="metric-grid" id="quickStats"></div>
+            <div class="nav-item" data-page="tasks" onclick="showPage('tasks')">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
             </div>
 
-            <!-- Category Distribution Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">📈 Categories</div>
-                    <span class="panel-badge" id="topCategoryBadge">--</span>
-                </div>
-                <div id="categoryList"></div>
+            <div class="nav-item" data-page="status" onclick="showPage('status')">
+                <span class="nav-icon">⚡</span>
+                <span class="nav-label">System Status</span>
             </div>
 
-            <!-- Cron Jobs Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">⏰ Active Cron Jobs</div>
-                    <span class="panel-badge active" id="cronCount">3 active</span>
-                </div>
-                <div id="cronList"></div>
-            </div>
-        </div>
-
-        <!-- Second Row -->
-        <div class="mc-grid">
-            <!-- Recent Activity Timeline -->
-            <div class="panel" style="grid-column: span 2;">
-                <div class="panel-header">
-                    <div class="panel-title">📋 Activity Timeline</div>
-                    <span class="panel-badge">Live</span>
-                </div>
-                <div class="timeline" id="timeline"></div>
+            <div class="nav-item" data-page="missions" onclick="showPage('missions')">
+                <span class="nav-icon">🎯</span>
+                <span class="nav-label">Missions</span>
             </div>
 
-            <!-- Alerts Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">🚨 Alerts</div>
-                    <span class="panel-badge" id="alertCount">0</span>
-                </div>
-                <div id="alertsList"></div>
+            <div class="nav-item" data-page="alerts" onclick="showPage('alerts')">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-label">Alerts</span>
             </div>
 
-            <!-- Quick Actions Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">⚡ Quick Actions</div>
-                </div>
-                <div class="quick-actions">
-                    <button class="quick-btn primary" onclick="location.reload()">🔄 Refresh</button>
-                    <button class="quick-btn" onclick="window.open('https://github.com/semirkabir/jarvis-dashboard', '_blank')">📂 Repo</button>
-                    <button class="quick-btn" onclick="exportData()">📥 Export</button>
-                    <button class="quick-btn" onclick="clearAlerts()">🧹 Clear Alerts</button>
-                </div>
-                <div style="margin-top: 1rem; padding: 0.75rem; background: #1e293b; border-radius: 6px;">
-                    <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 0.5rem;">DAILY STREAK</div>
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #22c55e;" id="streak">0 days</div>
+            <div class="nav-divider"></div>
+
+            <div class="nav-item" data-page="pricing" onclick="showPage('pricing')">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Price & Usage</span>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="nav-item" onclick="location.reload()">
+                    <span class="nav-icon">🔄</span>
+                    <span class="nav-label">Refresh</span>
                 </div>
             </div>
         </div>
 
-        <!-- Third Row - Detailed Charts -->
-        <div class="panel" style="margin-top: 1rem;">
-            <div class="panel-header">
-                <div class="panel-title">📊 Activity by Hour (PST)</div>
-                <span class="panel-badge">Last 7 days</span>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="status-dot"></div>
+                    <h1 id="pageTitle">🤖 Jarvis Mission Control</h1>
+                </div>
+                <div class="header-right">
+                    <span class="page-title" id="currentDate"></span>
+                    <div class="chat-toggle" onclick="toggleChat()">💬</div>
+                </div>
             </div>
-            <div id="hourlyChart" style="display: flex; align-items: flex-end; gap: 4px; height: 100px; padding: 1rem 0;"></div>
+
+            <!-- Page Container -->
+            <div class="page-container">
+                <!-- Dashboard Page -->
+                <div class="page active" id="page-dashboard">
+                    <div class="dashboard-grid">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">⚡ Quick Stats</div>
+                                <span class="panel-badge" id="statCount">0</span>
+                            </div>
+                            <div class="metric-grid" id="quickStats"></div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">📈 Categories</div>
+                            </div>
+                            <div id="categoryList" style="padding: 0.5rem 0;"></div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">⏰ Active Crons</div>
+                            </div>
+                            <div id="cronList"></div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">📊 Streak</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem;">
+                                <div style="font-size: 0.65rem; color: #64748b;">DAILY ACTIVITY</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #22c55e;" id="streak">0 days</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">📋 Activity Timeline</div>
+                            </div>
+                            <div class="timeline" id="timeline"></div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">🚨 Alerts</div>
+                            </div>
+                            <div id="alertsList"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-top: 1rem;">
+                        <div class="panel-header">
+                            <div class="panel-title">📊 Activity by Hour (PST)</div>
+                        </div>
+                        <div id="hourlyChart" style="display: flex; align-items: flex-end; gap: 3px; height: 80px; padding: 0.5rem 0;"></div>
+                    </div>
+                </div>
+
+                <!-- Tasks Page -->
+                <div class="page" id="page-tasks">
+                    <div class="board-container">
+                        <div class="board-column">
+                            <div class="board-header">
+                                <div class="board-title">
+                                    📅 Scheduled
+                                    <span class="board-count" id="scheduledCount">0</span>
+                                </div>
+                            </div>
+                            <div class="board-tasks" id="scheduledTasks"></div>
+                        </div>
+
+                        <div class="board-column">
+                            <div class="board-header">
+                                <div class="board-title">
+                                    📝 To Do
+                                    <span class="board-count" id="todoCount">0</span>
+                                </div>
+                            </div>
+                            <div class="board-tasks" id="todoTasks"></div>
+                        </div>
+
+                        <div class="board-column">
+                            <div class="board-header">
+                                <div class="board-title">
+                                    ✅ Completed
+                                    <span class="board-count" id="completedCount">0</span>
+                                </div>
+                            </div>
+                            <div class="board-tasks" id="completedTasks"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Status Page -->
+                <div class="page" id="page-status">
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="panel-header">
+                                <div class="panel-title">⚡ System Status</div>
+                            </div>
+                            <div id="systemStatusList"></div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="panel-header">
+                                <div class="panel-title">📡 Services</div>
+                            </div>
+                            <div id="servicesList"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-top: 1rem;">
+                        <div class="panel-header">
+                            <div class="panel-title">⏰ Cron Jobs Status</div>
+                        </div>
+                        <div id="cronStatusList"></div>
+                    </div>
+                </div>
+
+                <!-- Missions Page -->
+                <div class="page" id="page-missions">
+                    <div class="panel" style="margin-bottom: 1rem;">
+                        <div class="panel-header">
+                            <div class="panel-title">🎯 Active Missions</div>
+                        </div>
+                        <div class="empty-state">
+                            <div class="icon">🎯</div>
+                            <p>No active missions</p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">📜 Mission History</div>
+                        </div>
+                        <div class="empty-state">
+                            <div class="icon">📜</div>
+                            <p>No mission history yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Page -->
+                <div class="page" id="page-alerts">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">🚨 All Alerts</div>
+                        </div>
+                        <div id="allAlertsList"></div>
+                    </div>
+                </div>
+
+                <!-- Pricing & Usage Page -->
+                <div class="page" id="page-pricing">
+                    <div class="dashboard-grid">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">💰 Token Usage</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #e2e8f0;" id="totalTokens">0</div>
+                                <div style="font-size: 0.7rem; color: #64748b;">Total tokens (session)</div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">💸 Estimated Cost</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #22c55e;" id="estimatedCost">$0.00</div>
+                                <div style="font-size: 0.7rem; color: #64748b;">Based on current model pricing</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-top: 1rem;">
+                        <div class="panel-header">
+                            <div class="panel-title">📊 Usage by Category</div>
+                        </div>
+                        <div id="usageByCategory"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Chat -->
+        <div class="right-sidebar" id="rightSidebar">
+            <div class="chat-header">
+                <div class="chat-avatar">🤖</div>
+                <div class="chat-info">
+                    <h3>Jarvis</h3>
+                    <span>AI Assistant</span>
+                </div>
+                <div class="chat-close" onclick="toggleChat()">✕</div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message jarvis">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        Hey Mir! I'm ready to help. What do you need?
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <div class="chat-input-wrapper">
+                    <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeypress(event)">
+                    <button class="chat-send" onclick="sendMessage()">➤</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // System data
-        const systemStatus = [
-            { name: 'Gateway', value: 'Online', class: 'online' },
-            { name: 'Moltbook API', value: 'Connected', class: 'online' },
-            { name: 'Telegram Bot', value: 'Active', class: 'online' },
-            { name: 'Database', value: 'Synced', class: 'online' },
-            { name: 'Cron System', value: 'Running', class: 'online' }
-        ];
+        // State
+        let currentPage = 'dashboard';
+        let chatOpen = false;
+        let sidebarOpen = false;
 
-        const cronJobs = [
-            { name: 'Nightly Build', icon: '🏗️', schedule: 'Daily 3 AM PST', status: 'active' },
-            { name: 'Market Report', icon: '📊', schedule: 'Daily 9 AM PST', status: 'active' },
-            { name: 'Auto-Update', icon: '🔄', schedule: 'Daily 11 PM PST', status: 'active' },
-            { name: 'Heartbeat Check', icon: '💓', schedule: 'Every 4 hours', status: 'active' }
-        ];
+        // Navigation
+        function toggleSidebar() {
+            sidebarOpen = !sidebarOpen;
+            document.getElementById('leftSidebar').classList.toggle('expanded', sidebarOpen);
+        }
 
+        function showPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.page === page);
+            });
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.toggle('active', p.id === 'page-' + page);
+            });
+
+            const titles = {
+                dashboard: '🤖 Jarvis Mission Control',
+                tasks: '📋 Task Board',
+                status: '⚡ System Status',
+                missions: '🎯 Missions',
+                alerts: '🚨 Alerts',
+                pricing: '💰 Price & Usage'
+            };
+            document.getElementById('pageTitle').textContent = titles[page] || 'Jarvis';
+        }
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('rightSidebar').classList.toggle('expanded', chatOpen);
+            if (chatOpen) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        // Chat
+        function handleChatKeypress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            addMessage('user', text);
+            input.value = '';
+
+            // Simulate Jarvis response
+            setTimeout(() => {
+                const responses = [
+                    "Got it! Working on that now.",
+                    "On it! 👍",
+                    "I'll handle that for you.",
+                    "Understood. Processing...",
+                    "Sure thing! Give me a moment.",
+                    "Let me take care of that."
+                ];
+                addMessage('jarvis', responses[Math.floor(Math.random() * responses.length)]);
+            }, 1000);
+        }
+
+        function addMessage(type, text) {
+            const container = document.getElementById('chatMessages');
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.innerHTML = `
+                <div class="message-avatar">${type === 'jarvis' ? '🤖' : '👤'}</div>
+                <div class="message-content">
+                    ${text}
+                    <div class="message-time">${new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}</div>
+                </div>
+            `;
+            container.appendChild(message);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Data loading
         function loadData() {
             fetch('request-log.json?t=' + Date.now())
                 .then(response => response.json())
                 .then(data => {
-                    renderDashboard(data);
-                    updateLastSync(data.lastUpdated);
+                    renderAll(data);
                 })
                 .catch(error => {
                     console.error('Error loading data:', error);
-                    renderEmptyDashboard();
                 });
         }
 
-        function updateLastSync(timestamp) {
-            if (timestamp) {
-                const date = new Date(timestamp * 1000);
-                document.getElementById('lastSync').textContent =
-                    'Last sync: ' + date.toLocaleString('en-US', {
-                        timeZone: 'America/Los_Angeles'
-                    }) + ' PST';
-            }
-        }
-
-        function renderEmptyDashboard() {
-            document.getElementById('systemStatusList').innerHTML =
-                systemStatus.map(s => `
-                    <div class="status-row">
-                        <span class="status-label">${s.name}</span>
-                        <span class="status-value ${s.class}">${s.value}</span>
-                    </div>
-                `).join('');
-
-            document.getElementById('quickStats').innerHTML = `
-                <div class="metric-card">
-                    <div class="metric-label">Total Requests</div>
-                    <div class="metric-value">0</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">This Week</div>
-                    <div class="metric-value">0</div>
-                </div>
-            `;
-
-            document.getElementById('categoryList').innerHTML =
-                '<div class="empty-state"><div class="icon">📭</div>No data yet</div>';
-
-            document.getElementById('cronList').innerHTML =
-                cronJobs.map(c => `
-                    <div class="cron-item">
-                        <span class="cron-icon">${c.icon}</span>
-                        <div class="cron-info">
-                            <div class="cron-name">${c.name}</div>
-                            <div class="cron-schedule">${c.schedule}</div>
-                        </div>
-                        <span class="cron-status ${c.status}">${c.status}</span>
-                    </div>
-                `).join('');
-
-            document.getElementById('timeline').innerHTML =
-                '<div class="empty-state"><div class="icon">📋</div>Activity will appear here</div>';
-
-            document.getElementById('alertsList').innerHTML =
-                '<div class="empty-state"><div class="icon">✅</div>No alerts</div>';
-
-            document.getElementById('hourlyChart').innerHTML =
-                '<div class="empty-state">No activity data yet</div>';
-
-            document.getElementById('uptime').textContent = 'Uptime: Calculating...';
-            calculateUptime();
-        }
-
-        function renderDashboard(data) {
+        function renderAll(data) {
             const requests = data.requests || [];
 
-            // System Status
-            document.getElementById('systemStatusList').innerHTML =
-                systemStatus.map(s => `
-                    <div class="status-row">
-                        <span class="status-label">${s.name}</span>
-                        <span class="status-value ${s.class}">${s.value}</span>
-                    </div>
-                `).join('');
+            // Dashboard
+            renderDashboard(requests);
 
-            // Stats
+            // Tasks
+            renderTasks(requests);
+
+            // System Status
+            renderSystemStatus();
+
+            // Pricing
+            renderPricing(requests);
+        }
+
+        function renderDashboard(requests) {
             const total = requests.length;
-            const oneWeekAgo = (Date.now() / 1000) - (7 * 24 * 60 * 60);
-            const weekCount = requests.filter(r => r.timestamp >= oneWeekAgo).length;
             const completed = requests.filter(r => r.status === 'completed').length;
 
+            // Quick Stats
             document.getElementById('quickStats').innerHTML = `
                 <div class="metric-card success">
-                    <div class="metric-label">Total Requests</div>
+                    <div class="metric-label">Total</div>
                     <div class="metric-value">${total}</div>
-                    <div class="metric-sub">${weekCount} this week</div>
                 </div>
                 <div class="metric-card ${completed === total ? 'success' : 'warning'}">
-                    <div class="metric-label">Completion</div>
-                    <div class="metric-value">${total > 0 ? Math.round((completed / total) * 100) : 0}%</div>
-                    <div class="metric-sub">${completed}/${total} done</div>
+                    <div class="metric-label">Done</div>
+                    <div class="metric-value">${completed}</div>
+                    <div class="metric-sub">${total > 0 ? Math.round((completed / total) * 100) : 0}%</div>
                 </div>
             `;
-            document.getElementById('statCount').textContent = `${total} requests`;
+            document.getElementById('statCount').textContent = total + ' requests';
 
             // Categories
             const categoryCounts = {};
@@ -498,18 +935,16 @@
             });
 
             const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
-            const topCat = sortedCategories[0];
-
             document.getElementById('categoryList').innerHTML = sortedCategories.length === 0
-                ? '<div class="empty-state"><div class="icon">📭</div>No data yet</div>'
-                : sortedCategories.map(([cat, count]) => {
+                ? '<div class="empty-state"><div class="icon">📭</div></div>'
+                : sortedCategories.slice(0, 5).map(([cat, count]) => {
                     const pct = total > 0 ? Math.round((count / total) * 100) : 0;
                     const catClass = cat.split(' ')[1]?.toLowerCase() || 'conversation';
                     return `
-                        <div style="padding: 0.5rem 0; border-bottom: 1px solid #1f2937;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-                                <span class="category-pill ${catClass}">${cat}</span>
-                                <span style="font-size: 0.8rem; color: #94a3b8;">${count} (${pct}%)</span>
+                        <div style="padding: 0.3rem 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+                                <span class="category-pill ${catClass}" style="font-size: 0.65rem;">${cat}</span>
+                                <span style="font-size: 0.7rem; color: #94a3b8;">${count}</span>
                             </div>
                             <div class="progress-bar">
                                 <div class="progress-fill" style="width: ${pct}%"></div>
@@ -518,41 +953,38 @@
                     `;
                 }).join('');
 
-            if (topCat) {
-                document.getElementById('topCategoryBadge').textContent =
-                    topCat[0].split(' ')[1] || topCat[0];
-            }
-
-            // Cron Jobs
-            document.getElementById('cronList').innerHTML =
-                cronJobs.map(c => `
-                    <div class="cron-item">
-                        <span class="cron-icon">${c.icon}</span>
-                        <div class="cron-info">
-                            <div class="cron-name">${c.name}</div>
-                            <div class="cron-schedule">${c.schedule}</div>
-                        </div>
-                        <span class="cron-status ${c.status}">${c.status}</span>
+            // Crons
+            const cronJobs = [
+                { name: 'Nightly Build', icon: '🏗️', schedule: 'Daily 3 AM PST', status: 'active' },
+                { name: 'Market Report', icon: '📊', schedule: 'Daily 9 AM PST', status: 'active' },
+                { name: 'Auto-Update', icon: '🔄', schedule: 'Daily 11 PM PST', status: 'active' },
+                { name: 'Heartbeat', icon: '💓', schedule: 'Every 4h', status: 'active' }
+            ];
+            document.getElementById('cronList').innerHTML = cronJobs.map(c => `
+                <div class="cron-item">
+                    <span class="cron-icon">${c.icon}</span>
+                    <div class="cron-info">
+                        <div class="cron-name">${c.name}</div>
+                        <div class="cron-schedule">${c.schedule}</div>
                     </div>
-                `).join('');
+                    <span class="cron-status">${c.status}</span>
+                </div>
+            `).join('');
+
+            // Streak
+            const streak = calculateStreak(requests);
+            document.getElementById('streak').textContent = streak + ' days';
 
             // Timeline
-            const recent = requests.slice(-15).reverse();
+            const recent = requests.slice(-10).reverse();
             document.getElementById('timeline').innerHTML = recent.length === 0
-                ? '<div class="empty-state"><div class="icon">📋</div>Activity will appear here</div>'
+                ? '<div class="empty-state"><div class="icon">📋</div></div>'
                 : recent.map(r => {
-                    const pstDate = new Date((r.timestamp - 8 * 3600) * 1000);
-                    const statusClass = r.status === 'completed' ? 'completed' : r.status === 'pending' ? 'pending' : 'error';
+                    const time = new Date((r.timestamp - 8 * 3600) * 1000).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
                     return `
-                        <div class="timeline-item ${statusClass}">
-                            <div class="timeline-time">${pstDate.toLocaleTimeString('en-US', {
-                                hour: 'numeric',
-                                minute: '2-digit'
-                            })}</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">${r.text.substring(0, 60)}${r.text.length > 60 ? '...' : ''}</div>
-                                <div class="timeline-meta">${r.category} • ${r.status}</div>
-                            </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">${time}</span>
+                            <span class="timeline-text">${r.text.substring(0, 40)}...</span>
                         </div>
                     `;
                 }).join('');
@@ -560,51 +992,117 @@
             // Alerts
             const alerts = generateAlerts(requests);
             document.getElementById('alertsList').innerHTML = alerts.length === 0
-                ? '<div class="empty-state"><div class="icon">✅</div>No alerts</div>'
+                ? '<div class="empty-state"><div class="icon">✅</div></div>'
                 : alerts.map(a => `
                     <div class="alert-item ${a.level}">
-                        <span class="alert-icon">${a.icon}</span>
-                        <div>
-                            <div class="alert-text">${a.text}</div>
-                            <div class="alert-time">${a.time}</div>
-                        </div>
+                        <span>${a.icon}</span>
+                        <span style="font-size: 0.75rem; color: #e2e8f0;">${a.text}</span>
                     </div>
                 `).join('');
-            document.getElementById('alertCount').textContent = alerts.length;
 
             // Hourly Chart
             renderHourlyChart(requests);
-
-            // Streak
-            const streak = calculateStreak(requests);
-            document.getElementById('streak').textContent = `${streak} days`;
-
-            // Uptime
-            calculateUptime();
         }
 
-        function generateAlerts(requests) {
-            const alerts = [];
-            const pending = requests.filter(r => r.status === 'pending');
-            if (pending.length > 0) {
-                alerts.push({
-                    level: 'warning',
-                    icon: '⏳',
-                    text: `${pending.length} pending requests`,
-                    time: 'Action needed'
-                });
-            }
-            const oneDayAgo = (Date.now() / 1000) - (24 * 60 * 60);
-            const recentActivity = requests.filter(r => r.timestamp >= oneDayAgo);
-            if (recentActivity.length === 0 && requests.length > 0) {
-                alerts.push({
-                    level: 'info',
-                    icon: '📭',
-                    text: 'No activity in last 24 hours',
-                    time: 'Check in'
-                });
-            }
-            return alerts;
+        function renderTasks(requests) {
+            const scheduled = requests.filter(r => r.category?.includes('Reminders') || r.status === 'pending');
+            const todo = requests.filter(r => r.status === 'pending' && !r.category?.includes('Reminders'));
+            const completed = requests.filter(r => r.status === 'completed');
+
+            document.getElementById('scheduledCount').textContent = scheduled.length;
+            document.getElementById('todoCount').textContent = todo.length;
+            document.getElementById('completedCount').textContent = completed.length;
+
+            const renderTaskList = (tasks, containerId) => {
+                const container = document.getElementById(containerId);
+                container.innerHTML = tasks.length === 0
+                    ? '<div class="empty-state"><div class="icon">📭</div></div>'
+                    : tasks.map(r => `
+                        <div class="task-card ${r.status === 'completed' ? 'completed' : r.category?.includes('Reminders') ? 'scheduled' : ''}">
+                            <div class="task-title">${r.text.substring(0, 50)}${r.text.length > 50 ? '...' : ''}</div>
+                            <div class="task-meta">
+                                <span class="task-category">${r.category?.split(' ')[1] || 'Task'}</span>
+                                <span>${new Date((r.timestamp - 8 * 3600) * 1000).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    `).join('');
+            };
+
+            renderTaskList(scheduled.slice(0, 10), 'scheduledTasks');
+            renderTaskList(todo.slice(0, 10), 'todoTasks');
+            renderTaskList(completed.slice(-10).reverse(), 'completedTasks');
+        }
+
+        function renderSystemStatus() {
+            const systemStatus = [
+                { name: 'Gateway', value: 'Online', class: 'online' },
+                { name: 'Moltbook API', value: 'Connected', class: 'online' },
+                { name: 'Telegram Bot', value: 'Active', class: 'online' },
+                { name: 'Database', value: 'Synced', class: 'online' }
+            ];
+
+            document.getElementById('systemStatusList').innerHTML = systemStatus.map(s => `
+                <div class="status-row">
+                    <span class="status-label">${s.name}</span>
+                    <span class="status-value ${s.class}">${s.value}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('servicesList').innerHTML = systemStatus.map(s => `
+                <div class="status-row">
+                    <span class="status-label">${s.name}</span>
+                    <span class="status-value ${s.class}">${s.value}</span>
+                </div>
+            `).join('');
+
+            const cronStatus = [
+                { name: 'Nightly Build', status: '✅ Running', last: 'Today 3 AM' },
+                { name: 'Market Report', status: '✅ Running', last: 'Today 9 AM' },
+                { name: 'Auto-Update', status: '✅ Running', last: 'Yesterday 11 PM' },
+                { name: 'Heartbeat', status: '✅ Running', last: '1 hour ago' }
+            ];
+
+            document.getElementById('cronStatusList').innerHTML = cronStatus.map(c => `
+                <div class="cron-item">
+                    <div class="cron-info">
+                        <div class="cron-name">${c.name}</div>
+                        <div class="cron-schedule">${c.last}</div>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #22c55e;">${c.status}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderPricing(requests) {
+            // Mock token usage calculation
+            const totalTokens = requests.length * 1500; // Estimate ~1500 tokens per request
+            const costPerToken = 0.000002; // Example pricing
+            const estimatedCost = totalTokens * costPerToken;
+
+            document.getElementById('totalTokens').textContent = totalTokens.toLocaleString();
+            document.getElementById('estimatedCost').textContent = '$' + estimatedCost.toFixed(2);
+
+            // Usage by category
+            const categoryUsage = {};
+            requests.forEach(r => {
+                categoryUsage[r.category] = (categoryUsage[r.category] || 0) + 1500;
+            });
+
+            const maxUsage = Math.max(...Object.values(categoryUsage), 1);
+            document.getElementById('usageByCategory').innerHTML = Object.entries(categoryUsage).map(([cat, tokens]) => {
+                const pct = (tokens / maxUsage) * 100;
+                return `
+                    <div style="padding: 0.5rem 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span style="font-size: 0.8rem;">${cat}</span>
+                            <span style="font-size: 0.75rem; color: #94a3b8;">${tokens.toLocaleString()} tokens</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderHourlyChart(requests) {
@@ -616,8 +1114,7 @@
             });
 
             const maxCount = Math.max(...timeCounts, 1);
-            const chart = document.getElementById('hourlyChart');
-            chart.innerHTML = timeCounts.map((count, hour) => {
+            document.getElementById('hourlyChart').innerHTML = timeCounts.map((count, hour) => {
                 const height = (count / maxCount) * 100;
                 const isActive = hour >= 9 && hour <= 17;
                 return `
@@ -629,18 +1126,26 @@
                             border-radius: 2px;
                             min-height: 4px;
                         "></div>
-                        <span style="font-size: 0.55rem; color: #64748b;">${hour % 12 || 12}</span>
+                        <span style="font-size: 0.5rem; color: #64748b;">${hour % 12 || 12}</span>
                     </div>
                 `;
             }).join('');
         }
 
+        function generateAlerts(requests) {
+            const alerts = [];
+            const pending = requests.filter(r => r.status === 'pending');
+            if (pending.length > 0) {
+                alerts.push({ level: 'warning', icon: '⏳', text: `${pending.length} pending requests` });
+            }
+            return alerts;
+        }
+
         function calculateStreak(requests) {
             if (requests.length === 0) return 0;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
             let streak = 0;
-            let checkDate = new Date(today);
+            let checkDate = new Date();
+            checkDate.setHours(0, 0, 0, 0);
 
             while (true) {
                 const dayStart = Math.floor(checkDate.getTime() / 1000);
@@ -657,41 +1162,15 @@
             return streak;
         }
 
-        function calculateUptime() {
-            // Mock uptime - in production, this would come from the system
-            const uptimeHours = Math.floor(Math.random() * 30) + 1;
-            const uptimeDays = Math.floor(uptimeHours / 24);
-            const remainingHours = uptimeHours % 24;
-            if (uptimeDays > 0) {
-                document.getElementById('uptime').textContent = `Uptime: ${uptimeDays}d ${remainingHours}h`;
-            } else {
-                document.getElementById('uptime').textContent = `Uptime: ${uptimeHours}h`;
-            }
+        // Init
+        function init() {
+            document.getElementById('currentDate').textContent =
+                new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+            loadData();
+            setInterval(loadData, 30000);
         }
 
-        function exportData() {
-            fetch('request-log.json')
-                .then(response => response.json())
-                .then(data => {
-                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'jarvis-data-export.json';
-                    a.click();
-                    URL.revokeObjectURL(url);
-                });
-        }
-
-        function clearAlerts() {
-            document.getElementById('alertsList').innerHTML =
-                '<div class="empty-state"><div class="icon">✅</div>Alerts cleared</div>';
-            document.getElementById('alertCount').textContent = '0';
-        }
-
-        // Load data and refresh every 30 seconds
-        loadData();
-        setInterval(loadData, 30000);
+        init();
     </script>
 </body>
 </html>
