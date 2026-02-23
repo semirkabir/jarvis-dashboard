@@ -15,12 +15,9 @@
         }
 
         /* Layout */
-        .app-container {
-            display: flex;
-            height: 100vh;
-        }
+        .app-container { display: flex; height: 100vh; }
 
-        /* Left Sidebar - Navigation */
+        /* Left Sidebar */
         .left-sidebar {
             width: 60px;
             background: #111827;
@@ -33,26 +30,17 @@
             flex-shrink: 0;
             z-index: 100;
         }
-        .left-sidebar.expanded {
-            width: 220px;
-        }
+        .left-sidebar.expanded { width: 220px; }
         .sidebar-toggle {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #1f2937;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            transition: all 0.2s;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: #1f2937; border-radius: 8px; cursor: pointer;
+            margin-bottom: 1rem; transition: all 0.2s;
         }
         .sidebar-toggle:hover { background: #374151; }
         .nav-item {
             width: 100%;
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
             padding: 0.75rem;
             cursor: pointer;
             border-radius: 8px;
@@ -70,16 +58,8 @@
             transition: opacity 0.2s;
         }
         .left-sidebar.expanded .nav-label { opacity: 1; }
-        .nav-divider {
-            height: 1px;
-            background: #1f2937;
-            width: 80%;
-            margin: 0.5rem auto;
-        }
-        .sidebar-footer {
-            margin-top: auto;
-            padding: 0.5rem;
-        }
+        .nav-divider { height: 1px; background: #1f2937; width: 80%; margin: 0.5rem auto; }
+        .sidebar-footer { margin-top: auto; padding: 0.5rem; }
 
         /* Main Content */
         .main-content {
@@ -119,11 +99,8 @@
         .header-right { display: flex; align-items: center; gap: 1rem; }
         .page-title { font-size: 0.85rem; color: #94a3b8; }
         .chat-toggle {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             border-radius: 12px;
             cursor: pointer;
@@ -133,26 +110,17 @@
         .chat-toggle:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
 
         /* Page Content */
-        .page-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
+        .page-container { flex: 1; overflow-y: auto; padding: 1rem; }
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Dashboard Styles */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
+        /* Panels */
         .panel {
             background: #111827;
             padding: 1rem;
             border-radius: 8px;
             border: 1px solid #1f2937;
+            margin-bottom: 1rem;
         }
         .panel-header {
             display: flex;
@@ -177,12 +145,41 @@
             border-radius: 4px;
             background: #1f2937;
             color: #64748b;
+            cursor: pointer;
         }
+        .panel-badge:hover { background: #374151; }
         .panel-badge.active { background: #22c55e; color: #064e3b; }
         .panel-badge.warning { background: #f59e0b; color: #78350f; }
         .panel-badge.error { background: #ef4444; color: #7f1d1d; }
 
-        /* Task Board Styles */
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* Metric Cards */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        .metric-card {
+            background: #1e293b;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
+        }
+        .metric-card.success { border-left-color: #22c55e; }
+        .metric-card.warning { border-left-color: #f59e0b; }
+        .metric-card.danger { border-left-color: #ef4444; }
+        .metric-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
+        .metric-value { font-size: 1.1rem; font-weight: 700; color: #e2e8f0; }
+        .metric-sub { font-size: 0.65rem; color: #64748b; margin-top: 0.25rem; }
+
+        /* Task Board */
         .board-container {
             display: flex;
             gap: 1rem;
@@ -197,6 +194,10 @@
             border: 1px solid #1f2937;
             display: flex;
             flex-direction: column;
+        }
+        .board-column.drag-over {
+            border: 2px dashed #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
         }
         .board-header {
             padding: 1rem;
@@ -231,10 +232,15 @@
             border-left: 3px solid #3b82f6;
             margin-bottom: 0.75rem;
             cursor: grab;
+            transition: all 0.2s;
+        }
+        .task-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
         }
         .task-card.scheduled { border-left-color: #f59e0b; }
         .task-card.completed { border-left-color: #22c55e; opacity: 0.7; }
-        .task-card:hover { transform: translateX(4px); }
+        .task-card:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .task-title { font-size: 0.85rem; margin-bottom: 0.5rem; }
         .task-meta {
             display: flex;
@@ -243,19 +249,301 @@
             color: #64748b;
         }
         .task-category { padding: 0.1rem 0.4rem; border-radius: 3px; background: #1f2937; }
+        .task-delete {
+            font-size: 0.75rem;
+            color: #ef4444;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .task-card:hover .task-delete { opacity: 1; }
 
-        /* System Status Page */
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+        /* Add Task Button */
+        .add-task-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: #1f2937;
+            border: 2px dashed #374151;
+            border-radius: 6px;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
         }
-        .status-card {
+        .add-task-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Cron Items */
+        .cron-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #1e293b;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cron-item:hover { background: #374151; transform: translateX(4px); }
+        .cron-icon { font-size: 1rem; }
+        .cron-info { flex: 1; }
+        .cron-name { font-size: 0.8rem; color: #e2e8f0; font-weight: 600; }
+        .cron-schedule { font-size: 0.65rem; color: #64748b; }
+        .cron-status {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            background: #22c55e;
+            color: #064e3b;
+        }
+        .cron-status.inactive { background: #64748b; color: #f1f5f9; }
+
+        /* Usage Detail Table */
+        .usage-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        .usage-table th {
+            text-align: left;
+            padding: 0.5rem;
+            color: #94a3b8;
+            border-bottom: 1px solid #1f2937;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+        }
+        .usage-table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid #1f2937;
+        }
+        .usage-table tr:hover { background: #1e293b; }
+        .usage-table tr:last-child td { border-bottom: none; }
+
+        /* Alert Items */
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: #1e293b;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid;
+        }
+        .alert-item.critical { border-left-color: #ef4444; background: #1f1d1d; }
+        .alert-item.warning { border-left-color: #f59e0b; }
+        .alert-item.info { border-left-color: #3b82f6; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
             background: #111827;
-            padding: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid #1f2937;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 90%;
         }
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-title { font-size: 1rem; font-weight: 600; color: #e2e8f0; }
+        .modal-close {
+            font-size: 1.25rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: #e2e8f0; }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Forms */
+        .form-group { margin-bottom: 1rem; }
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid #1f2937;
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .form-textarea { min-height: 80px; resize: vertical; }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-secondary {
+            background: #1f2937;
+            color: #e2e8f0;
+        }
+        .btn-secondary:hover { background: #374151; }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover { background: #dc2626; }
+
+        /* Timeline */
+        .timeline { max-height: 200px; overflow-y: auto; }
+        .timeline-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-left: 2px solid #1f2937;
+            padding-left: 1rem;
+            margin-left: 0.5rem;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 0.6rem;
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+        .timeline-time { font-size: 0.7rem; color: #64748b; min-width: 60px; }
+        .timeline-text { font-size: 0.8rem; color: #e2e8f0; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #475569;
+        }
+        .empty-state .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+        /* Charts */
+        .chart-bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .chart-bar-label {
+            min-width: 100px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        .chart-bar-track {
+            flex: 1;
+            height: 24px;
+            background: #1f2937;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .chart-bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Category Pills */
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        .category-pill::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+        }
+        .category-pill.analysis::before { background: #10b981; }
+        .category-pill.writing::before { background: #3b82f6; }
+        .category-pill.technical::before { background: #8b5cf6; }
+        .category-pill.markets::before { background: #14b8a6; }
+        .category-pill.heartbeat::before { background: #64748b; }
+        .category-pill.conversation::before { background: #6366f1; }
+        .category-pill.research::before { background: #ec4899; }
+        .category-pill.reminders::before { background: #f59e0b; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 3px;
+            background: #1f2937;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 2px;
+        }
+
+        /* Status Row */
         .status-row {
             display: flex;
             justify-content: space-between;
@@ -268,7 +556,6 @@
         .status-value { font-size: 0.85rem; font-weight: 600; }
         .status-value.online { color: #22c55e; }
         .status-value.offline { color: #ef4444; }
-        .status-value.pending { color: #f59e0b; }
 
         /* Right Sidebar - Chat */
         .right-sidebar {
@@ -281,9 +568,7 @@
             overflow: hidden;
             flex-shrink: 0;
         }
-        .right-sidebar.expanded {
-            width: 380px;
-        }
+        .right-sidebar.expanded { width: 380px; }
         .chat-header {
             padding: 1rem;
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -292,8 +577,7 @@
             gap: 0.75rem;
         }
         .chat-avatar {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             background: white;
             border-radius: 50%;
             display: flex;
@@ -322,8 +606,7 @@
         }
         .message.user { flex-direction: row-reverse; }
         .message-avatar {
-            width: 28px;
-            height: 28px;
+            width: 28px; height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -379,8 +662,7 @@
             border-color: #6366f1;
         }
         .chat-send {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             background: #6366f1;
             border: none;
             border-radius: 50%;
@@ -391,131 +673,49 @@
         }
         .chat-send:hover { background: #8b5cf6; }
 
-        /* Metric Cards */
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-        .metric-card {
-            background: #1e293b;
-            padding: 0.75rem;
-            border-radius: 6px;
-            border-left: 3px solid #3b82f6;
-        }
-        .metric-card.success { border-left-color: #22c55e; }
-        .metric-card.warning { border-left-color: #f59e0b; }
-        .metric-card.danger { border-left-color: #ef4444; }
-        .metric-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
-        .metric-value { font-size: 1.1rem; font-weight: 700; color: #e2e8f0; }
-        .metric-sub { font-size: 0.65rem; color: #64748b; margin-top: 0.25rem; }
-
-        /* Timeline */
-        .timeline { max-height: 250px; overflow-y: auto; }
-        .timeline-item {
-            display: flex;
-            gap: 0.75rem;
-            padding: 0.5rem 0;
-            border-left: 2px solid #1f2937;
-            padding-left: 1rem;
-            margin-left: 0.5rem;
-            position: relative;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -5px;
-            top: 0.6rem;
-            width: 8px;
-            height: 8px;
-            background: #3b82f6;
-            border-radius: 50%;
-        }
-        .timeline-time { font-size: 0.7rem; color: #64748b; min-width: 60px; }
-        .timeline-text { font-size: 0.8rem; color: #e2e8f0; }
-
-        /* Alerts */
-        .alert-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
+        /* Cron History */
+        .cron-history-item {
             padding: 0.5rem;
             background: #1e293b;
             border-radius: 4px;
             margin-bottom: 0.5rem;
-            border-left: 3px solid;
+            font-size: 0.75rem;
         }
-        .alert-item.critical { border-left-color: #ef4444; background: #1f1d1d; }
-        .alert-item.warning { border-left-color: #f59e0b; }
-        .alert-item.info { border-left-color: #3b82f6; }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: #475569;
+        .cron-history-time {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            margin-bottom: 0.25rem;
         }
-        .empty-state .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .cron-history-status {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+        }
+        .cron-history-status.success { background: #22c55e; color: #064e3b; }
+        .cron-history-status.error { background: #ef4444; color: #7f1d1d; }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-        /* Progress Bar */
-        .progress-bar {
-            height: 3px;
+        /* Time Distribution Chart */
+        .time-dist-container {
+            display: grid;
+            grid-template-columns: repeat(24, 1fr);
+            gap: 2px;
+            height: 120px;
+        }
+        .time-dist-bar {
             background: #1f2937;
             border-radius: 2px;
-            overflow: hidden;
-            margin-top: 0.25rem;
+            position: relative;
+            min-height: 4px;
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-            border-radius: 2px;
-        }
-        .category-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            background: #1e293b;
-            color: #e2e8f0;
-        }
-        .category-pill::before {
-            content: '';
-            width: 6px; height: 6px;
-            border-radius: 50%;
-        }
-        .category-pill.analysis::before { background: #10b981; }
-        .category-pill.writing::before { background: #3b82f6; }
-        .category-pill.technical::before { background: #8b5cf6; }
-        .category-pill.markets::before { background: #14b8a6; }
-
-        /* Cron Items */
-        .cron-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem;
-            background: #1e293b;
-            border-radius: 4px;
-            margin-bottom: 0.4rem;
-        }
-        .cron-icon { font-size: 0.9rem; }
-        .cron-info { flex: 1; }
-        .cron-name { font-size: 0.75rem; color: #e2e8f0; font-weight: 600; }
-        .cron-schedule { font-size: 0.65rem; color: #64748b; }
-        .cron-status {
+        .time-dist-bar:hover::after {
+            content: attr(data-hour) ':00';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 0.6rem;
-            padding: 0.1rem 0.3rem;
-            border-radius: 3px;
-            background: #22c55e;
-            color: #064e3b;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -535,14 +735,14 @@
                 <span class="nav-label">Tasks</span>
             </div>
 
-            <div class="nav-item" data-page="status" onclick="showPage('status')">
-                <span class="nav-icon">⚡</span>
-                <span class="nav-label">System Status</span>
+            <div class="nav-item" data-page="crons" onclick="showPage('crons')">
+                <span class="nav-icon">⏰</span>
+                <span class="nav-label">Cron Jobs</span>
             </div>
 
-            <div class="nav-item" data-page="missions" onclick="showPage('missions')">
-                <span class="nav-icon">🎯</span>
-                <span class="nav-label">Missions</span>
+            <div class="nav-item" data-page="usage" onclick="showPage('usage')">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Usage</span>
             </div>
 
             <div class="nav-item" data-page="alerts" onclick="showPage('alerts')">
@@ -552,9 +752,9 @@
 
             <div class="nav-divider"></div>
 
-            <div class="nav-item" data-page="pricing" onclick="showPage('pricing')">
-                <span class="nav-icon">💰</span>
-                <span class="nav-label">Price & Usage</span>
+            <div class="nav-item" data-page="categories" onclick="showPage('categories')">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Categories</span>
             </div>
 
             <div class="sidebar-footer">
@@ -594,16 +794,16 @@
 
                         <div class="panel">
                             <div class="panel-header">
-                                <div class="panel-title">📈 Categories</div>
+                                <div class="panel-title">📈 Top Categories</div>
                             </div>
-                            <div id="categoryList" style="padding: 0.5rem 0;"></div>
+                            <div id="topCategories" style="padding: 0.5rem 0;"></div>
                         </div>
 
                         <div class="panel">
                             <div class="panel-header">
-                                <div class="panel-title">⏰ Active Crons</div>
+                                <div class="panel-title">⏰ Recent Activity</div>
                             </div>
-                            <div id="cronList"></div>
+                            <div class="timeline" id="timeline"></div>
                         </div>
 
                         <div class="panel">
@@ -620,31 +820,25 @@
                     <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
                         <div class="panel">
                             <div class="panel-header">
-                                <div class="panel-title">📋 Activity Timeline</div>
+                                <div class="panel-title">⏰ Time Distribution (PST)</div>
                             </div>
-                            <div class="timeline" id="timeline"></div>
+                            <div class="time-dist-container" id="timeDistChart"></div>
                         </div>
 
                         <div class="panel">
                             <div class="panel-header">
-                                <div class="panel-title">🚨 Alerts</div>
+                                <div class="panel-title">🚨 Recent Alerts</div>
                             </div>
-                            <div id="alertsList"></div>
+                            <div id="recentAlerts"></div>
                         </div>
-                    </div>
-
-                    <div class="panel" style="margin-top: 1rem;">
-                        <div class="panel-header">
-                            <div class="panel-title">📊 Activity by Hour (PST)</div>
-                        </div>
-                        <div id="hourlyChart" style="display: flex; align-items: flex-end; gap: 3px; height: 80px; padding: 0.5rem 0;"></div>
                     </div>
                 </div>
 
                 <!-- Tasks Page -->
                 <div class="page" id="page-tasks">
                     <div class="board-container">
-                        <div class="board-column">
+                        <div class="board-column" id="scheduled-column"
+                             ondragover="handleDragOver(event)" ondrop="handleDrop(event, 'scheduled')">
                             <div class="board-header">
                                 <div class="board-title">
                                     📅 Scheduled
@@ -652,9 +846,13 @@
                                 </div>
                             </div>
                             <div class="board-tasks" id="scheduledTasks"></div>
+                            <div style="padding: 0.75rem;">
+                                <button class="add-task-btn" onclick="openTaskModal('scheduled')">+ Add Task</button>
+                            </div>
                         </div>
 
-                        <div class="board-column">
+                        <div class="board-column" id="todo-column"
+                             ondragover="handleDragOver(event)" ondrop="handleDrop(event, 'todo')">
                             <div class="board-header">
                                 <div class="board-title">
                                     📝 To Do
@@ -662,9 +860,13 @@
                                 </div>
                             </div>
                             <div class="board-tasks" id="todoTasks"></div>
+                            <div style="padding: 0.75rem;">
+                                <button class="add-task-btn" onclick="openTaskModal('todo')">+ Add Task</button>
+                            </div>
                         </div>
 
-                        <div class="board-column">
+                        <div class="board-column" id="completed-column"
+                             ondragover="handleDragOver(event)" ondrop="handleDrop(event, 'completed')">
                             <div class="board-header">
                                 <div class="board-title">
                                     ✅ Completed
@@ -676,71 +878,23 @@
                     </div>
                 </div>
 
-                <!-- System Status Page -->
-                <div class="page" id="page-status">
-                    <div class="status-grid">
-                        <div class="status-card">
-                            <div class="panel-header">
-                                <div class="panel-title">⚡ System Status</div>
-                            </div>
-                            <div id="systemStatusList"></div>
-                        </div>
-
-                        <div class="status-card">
-                            <div class="panel-header">
-                                <div class="panel-title">📡 Services</div>
-                            </div>
-                            <div id="servicesList"></div>
-                        </div>
-                    </div>
-
-                    <div class="panel" style="margin-top: 1rem;">
-                        <div class="panel-header">
-                            <div class="panel-title">⏰ Cron Jobs Status</div>
-                        </div>
-                        <div id="cronStatusList"></div>
-                    </div>
-                </div>
-
-                <!-- Missions Page -->
-                <div class="page" id="page-missions">
-                    <div class="panel" style="margin-bottom: 1rem;">
-                        <div class="panel-header">
-                            <div class="panel-title">🎯 Active Missions</div>
-                        </div>
-                        <div class="empty-state">
-                            <div class="icon">🎯</div>
-                            <p>No active missions</p>
-                        </div>
-                    </div>
-
+                <!-- Crons Page -->
+                <div class="page" id="page-crons">
                     <div class="panel">
                         <div class="panel-header">
-                            <div class="panel-title">📜 Mission History</div>
+                            <div class="panel-title">⏰ Active Cron Jobs</div>
+                            <span class="panel-badge active" id="cronBadge">4 Active</span>
                         </div>
-                        <div class="empty-state">
-                            <div class="icon">📜</div>
-                            <p>No mission history yet</p>
-                        </div>
+                        <div id="cronList"></div>
                     </div>
                 </div>
 
-                <!-- Alerts Page -->
-                <div class="page" id="page-alerts">
-                    <div class="panel">
-                        <div class="panel-header">
-                            <div class="panel-title">🚨 All Alerts</div>
-                        </div>
-                        <div id="allAlertsList"></div>
-                    </div>
-                </div>
-
-                <!-- Pricing & Usage Page -->
-                <div class="page" id="page-pricing">
+                <!-- Usage Page -->
+                <div class="page" id="page-usage">
                     <div class="dashboard-grid">
                         <div class="panel">
                             <div class="panel-header">
-                                <div class="panel-title">💰 Token Usage</div>
+                                <div class="panel-title">💰 Total Usage</div>
                             </div>
                             <div style="text-align: center; padding: 1rem;">
                                 <div style="font-size: 1.5rem; font-weight: 700; color: #e2e8f0;" id="totalTokens">0</div>
@@ -754,16 +908,73 @@
                             </div>
                             <div style="text-align: center; padding: 1rem;">
                                 <div style="font-size: 1.5rem; font-weight: 700; color: #22c55e;" id="estimatedCost">$0.00</div>
-                                <div style="font-size: 0.7rem; color: #64748b;">Based on current model pricing</div>
+                                <div style="font-size: 0.7rem; color: #64748b;">Current model pricing</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel" style="margin-top: 1rem;">
+                    <div class="panel">
                         <div class="panel-header">
-                            <div class="panel-title">📊 Usage by Category</div>
+                            <div class="panel-title">🤖 Model Usage Breakdown</div>
                         </div>
-                        <div id="usageByCategory"></div>
+                        <table class="usage-table" id="modelUsageTable">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Tokens</th>
+                                    <th>Requests</th>
+                                    <th>%</th>
+                                    <th>Avg/Req</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">⏰ Usage by Hour (PST)</div>
+                        </div>
+                        <div class="time-dist-container" id="usageByHour"></div>
+                    </div>
+                </div>
+
+                <!-- Alerts Page -->
+                <div class="page" id="page-alerts">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">🚨 All Alerts</div>
+                            <span class="panel-badge" id="alertCount">0</span>
+                        </div>
+                        <div id="allAlertsList"></div>
+                    </div>
+                </div>
+
+                <!-- Categories Page -->
+                <div class="page" id="page-categories">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">📈 Categories Breakdown</div>
+                        </div>
+                        <table class="usage-table" id="categoriesTable">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Count</th>
+                                    <th>%</th>
+                                    <th>Tokens</th>
+                                    <th>Recent Activity</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">📊 Category Distribution Chart</div>
+                        </div>
+                        <div class="chart-bar-container" id="categoryChart"></div>
                     </div>
                 </div>
             </div>
@@ -799,11 +1010,159 @@
         </div>
     </div>
 
+    <!-- Task Modal -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="taskModalTitle">Add Task</div>
+                <div class="modal-close" onclick="closeTaskModal()">✕</div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Task Title</label>
+                    <input type="text" class="form-input" id="taskTitle" placeholder="What needs to be done?">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (optional)</label>
+                    <textarea class="form-textarea" id="taskDescription" placeholder="Add more details..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="taskCategory">
+                        <option value="💬 Conversation">💬 Conversation</option>
+                        <option value="🔧 Technical">🔧 Technical</option>
+                        <option value="🧠 Research">🧠 Research</option>
+                        <option value="📈 Analysis">📈 Analysis</option>
+                        <option value="💰 Markets">💰 Markets</option>
+                        <option value="✍️ Writing">✍️ Writing</option>
+                        <option value="📅 Reminders">📅 Reminders</option>
+                    </select>
+                </div>
+                <div class="form-group" id="scheduleGroup" style="display: none;">
+                    <label class="form-label">Schedule For</label>
+                    <input type="datetime-local" class="form-input" id="taskSchedule">
+                </div>
+                <input type="hidden" id="taskColumn">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cron Detail Modal -->
+    <div class="modal-overlay" id="cronModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="cronModalTitle">Cron Details</div>
+                <div class="modal-close" onclick="closeCronModal()">✕</div>
+            </div>
+            <div class="modal-body" id="cronModalBody"></div>
+        </div>
+    </div>
+
     <script>
         // State
         let currentPage = 'dashboard';
         let chatOpen = false;
         let sidebarOpen = false;
+        let tasks = [];
+        let draggedTask = null;
+
+        // Mock cron data
+        const cronJobs = [
+            {
+                id: 'nightly-build',
+                name: 'Nightly Build',
+                icon: '🏗️',
+                schedule: 'Daily 3:00 AM PST',
+                status: 'active',
+                prompt: 'Read friction-log.md for targets. Pick ONE small, reversible improvement. Build during idle time. Commit with detailed message. Update NIGHTLY_BUILD.md.',
+                history: [
+                    { time: '2026-02-23 03:00 AM PST', status: 'success', duration: '1m 24s', result: 'API Health Monitor script created' },
+                    { time: '2026-02-22 03:00 AM PST', status: 'success', duration: '58s', result: 'Skills registry created' },
+                    { time: '2026-02-21 03:00 AM PST', status: 'success', duration: '1m 12s', result: 'Memory consolidation' },
+                    { time: '2026-02-20 03:00 AM PST', status: 'error', duration: '2m 05s', result: 'Git conflict - resolved' }
+                ]
+            },
+            {
+                id: 'market-report',
+                name: 'Daily Market Report',
+                icon: '📊',
+                schedule: 'Daily 9:00 AM PST',
+                status: 'active',
+                prompt: 'Generate daily market and geopolitical report. Fetch market futures, key geopolitical developments, economic indicators. Format for Telegram delivery.',
+                history: [
+                    { time: '2026-02-23 09:00 AM PST', status: 'success', duration: '10s', result: 'Report delivered' },
+                    { time: '2026-02-22 09:00 AM PST', status: 'success', duration: '12s', result: 'Report delivered' },
+                    { time: '2026-02-21 09:00 AM PST', status: 'success', duration: '11s', result: 'Report delivered' }
+                ]
+            },
+            {
+                id: 'auto-update',
+                name: 'Daily Auto-Update',
+                icon: '🔄',
+                schedule: 'Daily 11:00 PM PST',
+                status: 'active',
+                prompt: 'Check for Clawdbot and skill updates. Run npm install -g clawdbot@latest. Check for updates in hub-installed skills. Skip skills with local modifications. Restart gateway after updates.',
+                history: [
+                    { time: '2026-02-22 11:00 PM PST', status: 'success', duration: '4m 45s', result: 'Updated to v2026.1.24-3, gog skill updated' },
+                    { time: '2026-02-21 11:00 PM PST', status: 'success', duration: '3m 30s', result: 'No updates available' },
+                    { time: '2026-02-20 11:00 PM PST', status: 'success', duration: '5m 12s', result: '3 skills updated' }
+                ]
+            },
+            {
+                id: 'heartbeat',
+                name: 'Heartbeat Check',
+                icon: '💓',
+                schedule: 'Every 4 hours',
+                status: 'active',
+                prompt: 'Read HEARTBEAT.md if it exists. Follow it strictly. Do not infer or repeat old tasks. Check Moltbook status (every 4+ hours). Review NIGHTLY_BUILD.md (every 3-4 days). Check friction-log.md for ongoing issues.',
+                history: [
+                    { time: '2026-02-23 16:00 PM PST', status: 'success', duration: '2s', result: 'HEARTBEAT_OK' },
+                    { time: '2026-02-23 12:00 PM PST', status: 'success', duration: '3s', result: 'Moltbook checked' },
+                    { time: '2026-02-23 08:00 AM PST', status: 'success', duration: '2s', result: 'HEARTBEAT_OK' }
+                ]
+            }
+        ];
+
+        // Mock model data
+        const modelUsage = [
+            { model: 'GLM-4.7', provider: 'Z-AI', tokens: 125000, requests: 85, cost: 0.0001 },
+            { model: 'Claude 3.5 Haiku', provider: 'Anthropic', tokens: 45200, requests: 42, cost: 0.0008 },
+            { model: 'GPT-4.1', provider: 'OpenAI', tokens: 28500, requests: 15, cost: 0.0025 },
+            { model: 'Gemini 3 Pro', provider: 'Google', tokens: 18000, requests: 12, cost: 0.0015 }
+        ];
+
+        // Mock alerts
+        const alerts = [
+            { level: 'critical', icon: '🔴', title: 'Disk Space Warning', message: 'Drive at 95% capacity - cleanup needed', time: '2 hours ago' },
+            { level: 'warning', icon: '🟡', title: 'Pending Tasks', message: '8 tasks scheduled but not completed', time: '1 hour ago' },
+            { level: 'info', icon: '🔵', title: 'Build Successful', message: 'Nightly build #9 completed successfully', time: '23 hours ago' },
+            { level: 'info', icon: '🔵', title: 'API Update', message: 'Moltbook API is back online after timeout', time: '3 hours ago' }
+        ];
+
+        // Load from localStorage
+        function loadTasks() {
+            const stored = localStorage.getItem('jarvis_tasks');
+            if (stored) {
+                tasks = JSON.parse(stored);
+            } else {
+                // Default sample tasks
+                tasks = [
+                    { id: 1, title: 'Review market analysis', description: 'Check Polymarket trends', category: '💰 Markets', column: 'todo', createdAt: Date.now() },
+                    { id: 2, title: 'Update documentation', description: 'Add new skills to README', category: '✍️ Writing', column: 'todo', createdAt: Date.now() },
+                    { id: 3, title: 'Security audit', description: 'Run security-audit skill', category: '🔧 Technical', column: 'completed', createdAt: Date.now() },
+                    { id: 4, title: 'Send morning report', description: 'Daily market brief', category: '📅 Reminders', column: 'scheduled', scheduledFor: '2026-02-24T09:00', createdAt: Date.now() }
+                ];
+                saveTasks();
+            }
+        }
+
+        function saveTasks() {
+            localStorage.setItem('jarvis_tasks', JSON.stringify(tasks));
+        }
 
         // Navigation
         function toggleSidebar() {
@@ -823,10 +1182,10 @@
             const titles = {
                 dashboard: '🤖 Jarvis Mission Control',
                 tasks: '📋 Task Board',
-                status: '⚡ System Status',
-                missions: '🎯 Missions',
+                crons: '⏰ Cron Jobs',
+                usage: '💰 Usage & Analytics',
                 alerts: '🚨 Alerts',
-                pricing: '💰 Price & Usage'
+                categories: '📈 Categories'
             };
             document.getElementById('pageTitle').textContent = titles[page] || 'Jarvis';
         }
@@ -839,6 +1198,422 @@
             }
         }
 
+        // Task Management
+        function renderTasks() {
+            const columns = {
+                scheduled: document.getElementById('scheduledTasks'),
+                todo: document.getElementById('todoTasks'),
+                completed: document.getElementById('completedTasks')
+            };
+
+            Object.keys(columns).forEach(col => {
+                const columnTasks = tasks.filter(t => t.column === col);
+                document.getElementById(col + 'Count').textContent = columnTasks.length;
+
+                columns[col].innerHTML = columnTasks.length === 0
+                    ? '<div class="empty-state"><div class="icon">📭</div></div>'
+                    : columnTasks.map(task => `
+                        <div class="task-card ${task.column}"
+                             draggable="true"
+                             ondragstart="handleDragStart(event, ${task.id})"
+                             ondragend="handleDragEnd(event)">
+                            <div class="task-title">${task.title}</div>
+                            ${task.description ? `<div style="font-size: 0.7rem; color: #64748b; margin-bottom: 0.5rem;">${task.description.substring(0, 50)}${task.description.length > 50 ? '...' : ''}</div>` : ''}
+                            <div class="task-meta">
+                                <span class="task-category">${task.category}</span>
+                                ${task.scheduledFor ? `<span>🕐 ${new Date(task.scheduledFor).toLocaleString()}</span>` : ''}
+                                <span>${new Date(task.createdAt).toLocaleDateString()}</span>
+                                <span class="task-delete" onclick="deleteTask(${task.id})">✕</span>
+                            </div>
+                        </div>
+                    `).join('');
+            });
+        }
+
+        function handleDragStart(e, taskId) {
+            draggedTask = taskId;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.board-column').forEach(col => {
+                col.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDrop(e, targetColumn) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+
+            if (draggedTask) {
+                const task = tasks.find(t => t.id === draggedTask);
+                if (task) {
+                    // If dropping to scheduled, show schedule modal
+                    if (targetColumn === 'scheduled' && task.column !== 'scheduled') {
+                        openScheduleModal(task.id, targetColumn);
+                    } else {
+                        task.column = targetColumn;
+                        if (targetColumn === 'completed') {
+                            task.completedAt = Date.now();
+                        }
+                        saveTasks();
+                        renderTasks();
+                    }
+                }
+                draggedTask = null;
+            }
+        }
+
+        function openTaskModal(column) {
+            document.getElementById('taskModalTitle').textContent = column === 'scheduled' ? 'Schedule Task' : 'Add Task';
+            document.getElementById('taskColumn').value = column;
+            document.getElementById('scheduleGroup').style.display = column === 'scheduled' ? 'block' : 'none';
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDescription').value = '';
+            document.getElementById('taskCategory').value = '💬 Conversation';
+            document.getElementById('taskSchedule').value = '';
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function openScheduleModal(taskId, targetColumn) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            document.getElementById('taskModalTitle').textContent = 'Schedule Task';
+            document.getElementById('taskColumn').value = targetColumn;
+            document.getElementById('scheduleGroup').style.display = 'block';
+            document.getElementById('taskTitle').value = task.title;
+            document.getElementById('taskDescription').value = task.description || '';
+            document.getElementById('taskCategory').value = task.category;
+            document.getElementById('taskSchedule').value = '';
+
+            // Store the task ID for updating
+            document.getElementById('taskModal').dataset.taskId = taskId;
+
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.remove('active');
+            delete document.getElementById('taskModal').dataset.taskId;
+        }
+
+        function saveTask() {
+            const title = document.getElementById('taskTitle').value.trim();
+            const description = document.getElementById('taskDescription').value.trim();
+            const category = document.getElementById('taskCategory').value;
+            const column = document.getElementById('taskColumn').value;
+            const scheduledFor = document.getElementById('taskSchedule').value;
+            const existingTaskId = document.getElementById('taskModal').dataset.taskId;
+
+            if (!title) {
+                alert('Please enter a task title');
+                return;
+            }
+
+            if (existingTaskId) {
+                // Update existing task
+                const task = tasks.find(t => t.id === parseInt(existingTaskId));
+                if (task) {
+                    task.title = title;
+                    task.description = description;
+                    task.category = category;
+                    task.column = column;
+                    if (scheduledFor) {
+                        task.scheduledFor = scheduledFor;
+                    }
+                }
+            } else {
+                // Create new task
+                const newTask = {
+                    id: Date.now(),
+                    title,
+                    description,
+                    category,
+                    column,
+                    createdAt: Date.now()
+                };
+                if (scheduledFor) {
+                    newTask.scheduledFor = scheduledFor;
+                }
+                tasks.push(newTask);
+            }
+
+            saveTasks();
+            renderTasks();
+            closeTaskModal();
+        }
+
+        function deleteTask(taskId) {
+            if (confirm('Delete this task?')) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // Cron Details
+        function renderCrons() {
+            document.getElementById('cronList').innerHTML = cronJobs.map(cron => `
+                <div class="cron-item" onclick="openCronModal('${cron.id}')">
+                    <span class="cron-icon">${cron.icon}</span>
+                    <div class="cron-info">
+                        <div class="cron-name">${cron.name}</div>
+                        <div class="cron-schedule">${cron.schedule}</div>
+                    </div>
+                    <span class="cron-status ${cron.status}">${cron.status}</span>
+                </div>
+            `).join('');
+            document.getElementById('cronBadge').textContent = `${cronJobs.length} Active`;
+        }
+
+        function openCronModal(cronId) {
+            const cron = cronJobs.find(c => c.id === cronId);
+            if (!cron) return;
+
+            document.getElementById('cronModalTitle').textContent = cron.name;
+            document.getElementById('cronModalBody').innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem;">Schedule</div>
+                    <div style="font-size: 0.9rem; color: #e2e8f0;">${cron.schedule}</div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem;">Status</div>
+                    <span class="cron-status ${cron.status}">${cron.status.toUpperCase()}</span>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem;">Prompt / Instructions</div>
+                    <div style="background: #1e293b; padding: 1rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.5; color: #e2e8f0;">${cron.prompt}</div>
+                </div>
+
+                <div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem;">Run History</div>
+                    ${cron.history.map(h => `
+                        <div class="cron-history-item">
+                            <div class="cron-history-time">${h.time}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                                <span class="cron-history-status ${h.status}">${h.status.toUpperCase()}</span>
+                                <span style="color: #64748b;">${h.duration}</span>
+                            </div>
+                            <div style="color: #e2e8f0;">${h.result}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('cronModal').classList.add('active');
+        }
+
+        function closeCronModal() {
+            document.getElementById('cronModal').classList.remove('active');
+        }
+
+        // Usage Analytics
+        function renderUsage() {
+            const totalTokens = modelUsage.reduce((sum, m) => sum + m.tokens, 0);
+            const totalRequests = modelUsage.reduce((sum, m) => sum + m.requests, 0);
+            const totalCost = modelUsage.reduce((sum, m) => sum + (m.tokens * m.cost), 0);
+
+            document.getElementById('totalTokens').textContent = totalTokens.toLocaleString();
+            document.getElementById('estimatedCost').textContent = '$' + totalCost.toFixed(2);
+
+            // Model usage table
+            const maxTokens = Math.max(...modelUsage.map(m => m.tokens));
+            document.getElementById('modelUsageTable').querySelector('tbody').innerHTML = modelUsage.map(m => {
+                const pct = totalTokens > 0 ? ((m.tokens / totalTokens) * 100).toFixed(1) : 0;
+                const avgTokens = m.requests > 0 ? Math.round(m.tokens / m.requests) : 0;
+                return `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600;">${m.model}</div>
+                            <div style="font-size: 0.65rem; color: #64748b;">${m.provider}</div>
+                        </td>
+                        <td>${m.tokens.toLocaleString()}</td>
+                        <td>${m.requests}</td>
+                        <td>${pct}%</td>
+                        <td>${avgTokens}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Time distribution
+            const timeData = Array(24).fill(0).map(() => ({ hour: 0, tokens: 0 }));
+            modelUsage.forEach((m, i) => {
+                const hour = (i * 6) % 24; // Mock distribution
+                timeData[hour].hour = hour;
+                timeData[hour].tokens += Math.floor(m.tokens / 4);
+            });
+            const maxTimeTokens = Math.max(...timeData.map(t => t.tokens));
+            document.getElementById('usageByHour').innerHTML = timeData.map(t => {
+                const height = maxTimeTokens > 0 ? (t.tokens / maxTimeTokens) * 100 : 0;
+                const hourLabel = t.hour % 12 || 12;
+                const ampm = t.hour >= 12 ? 'PM' : 'AM';
+                return `
+                    <div class="time-dist-bar" style="height: ${Math.max(height, 4)}%; background: ${t.tokens > 0 ? '#3b82f6' : '#1f2937'};"
+                         data-hour="${hourLabel}${ampm}"></div>
+                `;
+            }).join('');
+        }
+
+        // Alerts
+        function renderAlerts() {
+            document.getElementById('alertCount').textContent = alerts.length;
+
+            const renderAlert = (a) => `
+                <div class="alert-item ${a.level}">
+                    <span style="font-size: 1.25rem;">${a.icon}</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 0.85rem;">${a.title}</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">${a.message}</div>
+                        <div style="font-size: 0.65rem; color: #64748b; margin-top: 0.25rem;">${a.time}</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('recentAlerts').innerHTML = alerts.slice(0, 3).map(renderAlert).join('');
+            document.getElementById('allAlertsList').innerHTML = alerts.map(renderAlert).join('');
+        }
+
+        // Categories
+        function renderCategories() {
+            // Mock category data
+            const categories = [
+                { name: '💬 Conversation', count: 45, tokens: 67500, lastActive: '2 hours ago' },
+                { name: '🔧 Technical', count: 38, tokens: 57000, lastActive: '1 hour ago' },
+                { name: '💰 Markets', count: 28, tokens: 42000, lastActive: '4 hours ago' },
+                { name: '📈 Analysis', count: 22, tokens: 33000, lastActive: '6 hours ago' },
+                { name: '🧠 Research', count: 15, tokens: 22500, lastActive: '8 hours ago' },
+                { name: '✍️ Writing', count: 12, tokens: 18000, lastActive: '12 hours ago' },
+                { name: '📅 Reminders', count: 8, tokens: 12000, lastActive: '23 hours ago' },
+                { name: '🏥 Heartbeat', count: 5, tokens: 7500, lastActive: '3 hours ago' }
+            ];
+
+            const totalCount = categories.reduce((sum, c) => sum + c.count, 0);
+
+            document.getElementById('categoriesTable').querySelector('tbody').innerHTML = categories.map(c => {
+                const pct = totalCount > 0 ? ((c.count / totalCount) * 100).toFixed(1) : 0;
+                return `
+                    <tr>
+                        <td>${c.name}</td>
+                        <td>${c.count}</td>
+                        <td>${pct}%</td>
+                        <td>${c.tokens.toLocaleString()}</td>
+                        <td>${c.lastActive}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const maxCount = Math.max(...categories.map(c => c.count));
+            document.getElementById('categoryChart').innerHTML = categories.map(c => {
+                const pct = maxCount > 0 ? (c.count / maxCount) * 100 : 0;
+                return `
+                    <div class="chart-bar-row">
+                        <div class="chart-bar-label">${c.name}</div>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill" style="width: ${pct}%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white;">${c.count}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Dashboard
+        function renderDashboard() {
+            // Quick stats
+            const totalRequests = tasks.length + 173; // Mock total
+            const completed = tasks.filter(t => t.column === 'completed').length;
+            document.getElementById('quickStats').innerHTML = `
+                <div class="metric-card success">
+                    <div class="metric-label">Total Requests</div>
+                    <div class="metric-value">${totalRequests}</div>
+                    <div class="metric-sub">All time</div>
+                </div>
+                <div class="metric-card ${completed === totalRequests ? 'success' : 'warning'}">
+                    <div class="metric-label">Completed</div>
+                    <div class="metric-value">${completed}</div>
+                    <div class="metric-sub">${Math.round((completed / totalRequests) * 100)}% rate</div>
+                </div>
+            `;
+            document.getElementById('statCount').textContent = totalRequests + ' requests';
+
+            // Top categories
+            document.getElementById('topCategories').innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="category-pill conversation">💬 Conversation</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8;">45 (26%)</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="category-pill technical">🔧 Technical</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8;">38 (22%)</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 84%"></div></div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="category-pill markets">💰 Markets</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8;">28 (16%)</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 62%"></div></div>
+                </div>
+            `;
+
+            // Timeline
+            document.getElementById('timeline').innerHTML = `
+                <div class="timeline-item">
+                    <span class="timeline-time">4:38 PM</span>
+                    <span class="timeline-text">Nightly build #9 completed</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-time">9:00 AM</span>
+                    <span class="timeline-text">Market report sent to Telegram</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-time">7:38 AM</span>
+                    <span class="timeline-text">Moltbook API check successful</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-time">3:00 AM</span>
+                    <span class="timeline-text">Auto-update ran (4m 45s)</span>
+                </div>
+            `;
+
+            // Streak
+            document.getElementById('streak').textContent = '7 days';
+
+            // Time distribution chart
+            const timeDistData = [0,0,0,0,0,0,0,2,5,8,12,15,18,14,10,8,6,5,4,3,2,1,0,0];
+            const maxTimeDist = Math.max(...timeDistData);
+            document.getElementById('timeDistChart').innerHTML = timeDistData.map((count, hour) => {
+                const height = (count / maxTimeDist) * 100;
+                const hourLabel = hour % 12 || 12;
+                return `
+                    <div class="time-dist-bar" style="height: ${Math.max(height, 4)}%; background: ${count > 0 ? '#3b82f6' : '#1f2937'};"
+                         data-hour="${hourLabel}"></div>
+                `;
+            }).join('');
+
+            // Recent alerts
+            document.getElementById('recentAlerts').innerHTML = alerts.slice(0, 3).map(a => `
+                <div class="alert-item ${a.level}">
+                    <span>${a.icon}</span>
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: 600;">${a.title}</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8;">${a.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // Chat
         function handleChatKeypress(e) {
             if (e.key === 'Enter') sendMessage();
@@ -849,19 +1624,18 @@
             const text = input.value.trim();
             if (!text) return;
 
-            // Add user message
             addMessage('user', text);
             input.value = '';
 
             // Simulate Jarvis response
             setTimeout(() => {
                 const responses = [
-                    "Got it! Working on that now.",
+                    "Got it! I'll add that to the task board.",
+                    "Working on it now. Should be done shortly.",
+                    "I've scheduled that for you.",
                     "On it! 👍",
-                    "I'll handle that for you.",
-                    "Understood. Processing...",
-                    "Sure thing! Give me a moment.",
-                    "Let me take care of that."
+                    "Let me check the cron history for you.",
+                    "Updating the dashboard with the latest data..."
                 ];
                 addMessage('jarvis', responses[Math.floor(Math.random() * responses.length)]);
             }, 1000);
@@ -882,292 +1656,23 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // Data loading
-        function loadData() {
-            fetch('request-log.json?t=' + Date.now())
-                .then(response => response.json())
-                .then(data => {
-                    renderAll(data);
-                })
-                .catch(error => {
-                    console.error('Error loading data:', error);
-                });
-        }
-
-        function renderAll(data) {
-            const requests = data.requests || [];
-
-            // Dashboard
-            renderDashboard(requests);
-
-            // Tasks
-            renderTasks(requests);
-
-            // System Status
-            renderSystemStatus();
-
-            // Pricing
-            renderPricing(requests);
-        }
-
-        function renderDashboard(requests) {
-            const total = requests.length;
-            const completed = requests.filter(r => r.status === 'completed').length;
-
-            // Quick Stats
-            document.getElementById('quickStats').innerHTML = `
-                <div class="metric-card success">
-                    <div class="metric-label">Total</div>
-                    <div class="metric-value">${total}</div>
-                </div>
-                <div class="metric-card ${completed === total ? 'success' : 'warning'}">
-                    <div class="metric-label">Done</div>
-                    <div class="metric-value">${completed}</div>
-                    <div class="metric-sub">${total > 0 ? Math.round((completed / total) * 100) : 0}%</div>
-                </div>
-            `;
-            document.getElementById('statCount').textContent = total + ' requests';
-
-            // Categories
-            const categoryCounts = {};
-            requests.forEach(r => {
-                categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
-            });
-
-            const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
-            document.getElementById('categoryList').innerHTML = sortedCategories.length === 0
-                ? '<div class="empty-state"><div class="icon">📭</div></div>'
-                : sortedCategories.slice(0, 5).map(([cat, count]) => {
-                    const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-                    const catClass = cat.split(' ')[1]?.toLowerCase() || 'conversation';
-                    return `
-                        <div style="padding: 0.3rem 0;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
-                                <span class="category-pill ${catClass}" style="font-size: 0.65rem;">${cat}</span>
-                                <span style="font-size: 0.7rem; color: #94a3b8;">${count}</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${pct}%"></div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-            // Crons
-            const cronJobs = [
-                { name: 'Nightly Build', icon: '🏗️', schedule: 'Daily 3 AM PST', status: 'active' },
-                { name: 'Market Report', icon: '📊', schedule: 'Daily 9 AM PST', status: 'active' },
-                { name: 'Auto-Update', icon: '🔄', schedule: 'Daily 11 PM PST', status: 'active' },
-                { name: 'Heartbeat', icon: '💓', schedule: 'Every 4h', status: 'active' }
-            ];
-            document.getElementById('cronList').innerHTML = cronJobs.map(c => `
-                <div class="cron-item">
-                    <span class="cron-icon">${c.icon}</span>
-                    <div class="cron-info">
-                        <div class="cron-name">${c.name}</div>
-                        <div class="cron-schedule">${c.schedule}</div>
-                    </div>
-                    <span class="cron-status">${c.status}</span>
-                </div>
-            `).join('');
-
-            // Streak
-            const streak = calculateStreak(requests);
-            document.getElementById('streak').textContent = streak + ' days';
-
-            // Timeline
-            const recent = requests.slice(-10).reverse();
-            document.getElementById('timeline').innerHTML = recent.length === 0
-                ? '<div class="empty-state"><div class="icon">📋</div></div>'
-                : recent.map(r => {
-                    const time = new Date((r.timestamp - 8 * 3600) * 1000).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
-                    return `
-                        <div class="timeline-item">
-                            <span class="timeline-time">${time}</span>
-                            <span class="timeline-text">${r.text.substring(0, 40)}...</span>
-                        </div>
-                    `;
-                }).join('');
-
-            // Alerts
-            const alerts = generateAlerts(requests);
-            document.getElementById('alertsList').innerHTML = alerts.length === 0
-                ? '<div class="empty-state"><div class="icon">✅</div></div>'
-                : alerts.map(a => `
-                    <div class="alert-item ${a.level}">
-                        <span>${a.icon}</span>
-                        <span style="font-size: 0.75rem; color: #e2e8f0;">${a.text}</span>
-                    </div>
-                `).join('');
-
-            // Hourly Chart
-            renderHourlyChart(requests);
-        }
-
-        function renderTasks(requests) {
-            const scheduled = requests.filter(r => r.category?.includes('Reminders') || r.status === 'pending');
-            const todo = requests.filter(r => r.status === 'pending' && !r.category?.includes('Reminders'));
-            const completed = requests.filter(r => r.status === 'completed');
-
-            document.getElementById('scheduledCount').textContent = scheduled.length;
-            document.getElementById('todoCount').textContent = todo.length;
-            document.getElementById('completedCount').textContent = completed.length;
-
-            const renderTaskList = (tasks, containerId) => {
-                const container = document.getElementById(containerId);
-                container.innerHTML = tasks.length === 0
-                    ? '<div class="empty-state"><div class="icon">📭</div></div>'
-                    : tasks.map(r => `
-                        <div class="task-card ${r.status === 'completed' ? 'completed' : r.category?.includes('Reminders') ? 'scheduled' : ''}">
-                            <div class="task-title">${r.text.substring(0, 50)}${r.text.length > 50 ? '...' : ''}</div>
-                            <div class="task-meta">
-                                <span class="task-category">${r.category?.split(' ')[1] || 'Task'}</span>
-                                <span>${new Date((r.timestamp - 8 * 3600) * 1000).toLocaleDateString()}</span>
-                            </div>
-                        </div>
-                    `).join('');
-            };
-
-            renderTaskList(scheduled.slice(0, 10), 'scheduledTasks');
-            renderTaskList(todo.slice(0, 10), 'todoTasks');
-            renderTaskList(completed.slice(-10).reverse(), 'completedTasks');
-        }
-
-        function renderSystemStatus() {
-            const systemStatus = [
-                { name: 'Gateway', value: 'Online', class: 'online' },
-                { name: 'Moltbook API', value: 'Connected', class: 'online' },
-                { name: 'Telegram Bot', value: 'Active', class: 'online' },
-                { name: 'Database', value: 'Synced', class: 'online' }
-            ];
-
-            document.getElementById('systemStatusList').innerHTML = systemStatus.map(s => `
-                <div class="status-row">
-                    <span class="status-label">${s.name}</span>
-                    <span class="status-value ${s.class}">${s.value}</span>
-                </div>
-            `).join('');
-
-            document.getElementById('servicesList').innerHTML = systemStatus.map(s => `
-                <div class="status-row">
-                    <span class="status-label">${s.name}</span>
-                    <span class="status-value ${s.class}">${s.value}</span>
-                </div>
-            `).join('');
-
-            const cronStatus = [
-                { name: 'Nightly Build', status: '✅ Running', last: 'Today 3 AM' },
-                { name: 'Market Report', status: '✅ Running', last: 'Today 9 AM' },
-                { name: 'Auto-Update', status: '✅ Running', last: 'Yesterday 11 PM' },
-                { name: 'Heartbeat', status: '✅ Running', last: '1 hour ago' }
-            ];
-
-            document.getElementById('cronStatusList').innerHTML = cronStatus.map(c => `
-                <div class="cron-item">
-                    <div class="cron-info">
-                        <div class="cron-name">${c.name}</div>
-                        <div class="cron-schedule">${c.last}</div>
-                    </div>
-                    <span style="font-size: 0.7rem; color: #22c55e;">${c.status}</span>
-                </div>
-            `).join('');
-        }
-
-        function renderPricing(requests) {
-            // Mock token usage calculation
-            const totalTokens = requests.length * 1500; // Estimate ~1500 tokens per request
-            const costPerToken = 0.000002; // Example pricing
-            const estimatedCost = totalTokens * costPerToken;
-
-            document.getElementById('totalTokens').textContent = totalTokens.toLocaleString();
-            document.getElementById('estimatedCost').textContent = '$' + estimatedCost.toFixed(2);
-
-            // Usage by category
-            const categoryUsage = {};
-            requests.forEach(r => {
-                categoryUsage[r.category] = (categoryUsage[r.category] || 0) + 1500;
-            });
-
-            const maxUsage = Math.max(...Object.values(categoryUsage), 1);
-            document.getElementById('usageByCategory').innerHTML = Object.entries(categoryUsage).map(([cat, tokens]) => {
-                const pct = (tokens / maxUsage) * 100;
-                return `
-                    <div style="padding: 0.5rem 0;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-                            <span style="font-size: 0.8rem;">${cat}</span>
-                            <span style="font-size: 0.75rem; color: #94a3b8;">${tokens.toLocaleString()} tokens</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${pct}%"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderHourlyChart(requests) {
-            const timeCounts = Array(24).fill(0);
-            requests.forEach(r => {
-                const pstDate = new Date((r.timestamp - 8 * 3600) * 1000);
-                const hour = pstDate.getHours();
-                timeCounts[hour]++;
-            });
-
-            const maxCount = Math.max(...timeCounts, 1);
-            document.getElementById('hourlyChart').innerHTML = timeCounts.map((count, hour) => {
-                const height = (count / maxCount) * 100;
-                const isActive = hour >= 9 && hour <= 17;
-                return `
-                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                        <div style="
-                            width: 100%;
-                            height: ${Math.max(height, 2)}%;
-                            background: ${count > 0 ? (isActive ? '#3b82f6' : '#6366f1') : '#1f2937'};
-                            border-radius: 2px;
-                            min-height: 4px;
-                        "></div>
-                        <span style="font-size: 0.5rem; color: #64748b;">${hour % 12 || 12}</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function generateAlerts(requests) {
-            const alerts = [];
-            const pending = requests.filter(r => r.status === 'pending');
-            if (pending.length > 0) {
-                alerts.push({ level: 'warning', icon: '⏳', text: `${pending.length} pending requests` });
-            }
-            return alerts;
-        }
-
-        function calculateStreak(requests) {
-            if (requests.length === 0) return 0;
-            let streak = 0;
-            let checkDate = new Date();
-            checkDate.setHours(0, 0, 0, 0);
-
-            while (true) {
-                const dayStart = Math.floor(checkDate.getTime() / 1000);
-                const dayEnd = dayStart + 24 * 60 * 60;
-                const hasActivity = requests.some(r => r.timestamp >= dayStart && r.timestamp < dayEnd);
-
-                if (hasActivity) {
-                    streak++;
-                    checkDate.setDate(checkDate.getDate() - 1);
-                } else {
-                    break;
-                }
-            }
-            return streak;
-        }
-
         // Init
         function init() {
             document.getElementById('currentDate').textContent =
                 new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-            loadData();
-            setInterval(loadData, 30000);
+
+            loadTasks();
+            renderTasks();
+            renderCrons();
+            renderUsage();
+            renderAlerts();
+            renderCategories();
+            renderDashboard();
+
+            setInterval(() => {
+                // Auto-refresh data
+                renderDashboard();
+            }, 30000);
         }
 
         init();
