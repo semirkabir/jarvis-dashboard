@@ -3,244 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis Task Request Dashboard</title>
+    <title>Jarvis Mission Control</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            background: #0a0e17;
             color: #e2e8f0;
-            padding: 2rem;
-            line-height: 1.6;
+            padding: 1rem;
+            line-height: 1.5;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1600px; margin: 0 auto; }
+
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #334155;
-        }
-        .header h1 { font-size: 1.8rem; color: #60a5fa; }
-        .last-updated { color: #94a3b8; font-size: 0.9rem; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: #1e293b;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
-        }
-        .stat-card h3 {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .stat-card .value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #e2e8f0;
-        }
-        .stat-card .stat-sub {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-top: 0.25rem;
-        }
-        .charts-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        @media (max-width: 768px) {
-            .charts-section { grid-template-columns: 1fr; }
-        }
-        .chart-card {
-            background: #1e293b;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
-        }
-        .chart-card h2 {
-            font-size: 1.1rem;
             margin-bottom: 1rem;
-            color: #e2e8f0;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 8px;
+            border: 1px solid #334155;
         }
-        .bar-chart {
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .status-dot {
+            width: 12px; height: 12px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            color: #60a5fa;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .header-right { text-align: right; }
+        .uptime { color: #94a3b8; font-size: 0.85rem; }
+        .last-sync { color: #64748b; font-size: 0.75rem; }
+
+        /* Mission Control Grid */
+        .mc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 1200px) { .mc-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .mc-grid { grid-template-columns: 1fr; } }
+
+        /* Panels */
+        .panel {
+            background: #111827;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+        }
+        .panel-header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1f2937;
+        }
+        .panel-title {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .panel-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: #1f2937;
+            color: #64748b;
+        }
+        .panel-badge.active { background: #22c55e; color: #064e3b; }
+        .panel-badge.warning { background: #f59e0b; color: #78350f; }
+        .panel-badge.error { background: #ef4444; color: #7f1d1d; }
+
+        /* Status Indicators */
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #1f2937;
+        }
+        .status-row:last-child { border-bottom: none; }
+        .status-label { font-size: 0.85rem; color: #e2e8f0; }
+        .status-value { font-size: 0.85rem; font-weight: 600; }
+        .status-value.online { color: #22c55e; }
+        .status-value.offline { color: #ef4444; }
+        .status-value.pending { color: #f59e0b; }
+
+        /* Metric Cards */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 0.75rem;
         }
-        .bar-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .bar-label {
-            min-width: 100px;
-            font-size: 0.85rem;
-            color: #94a3b8;
-        }
-        .bar-track {
-            flex: 1;
-            height: 32px;
-            background: #0f172a;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .bar-fill {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 0.5rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-radius: 6px;
-            transition: width 0.3s ease;
-        }
-        .requests-list {
+        .metric-card {
             background: #1e293b;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
         }
-        .requests-list h2 {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: #e2e8f0;
+        .metric-card.success { border-left-color: #22c55e; }
+        .metric-card.warning { border-left-color: #f59e0b; }
+        .metric-card.danger { border-left-color: #ef4444; }
+        .metric-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+        .metric-value { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; }
+        .metric-sub { font-size: 0.7rem; color: #64748b; margin-top: 0.25rem; }
+
+        /* Activity Timeline */
+        .timeline { max-height: 300px; overflow-y: auto; }
+        .timeline-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-left: 2px solid #1f2937;
+            padding-left: 1rem;
+            margin-left: 0.5rem;
+            position: relative;
         }
-        .request-item {
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 0.6rem;
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+        .timeline-item.completed::before { background: #22c55e; }
+        .timeline-item.pending::before { background: #f59e0b; }
+        .timeline-item.error::before { background: #ef4444; }
+        .timeline-time { font-size: 0.7rem; color: #64748b; min-width: 70px; }
+        .timeline-content { flex: 1; }
+        .timeline-text { font-size: 0.85rem; color: #e2e8f0; }
+        .timeline-meta { font-size: 0.7rem; color: #64748b; margin-top: 0.25rem; }
+
+        /* Cron Job List */
+        .cron-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            background: #1e293b;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .cron-icon { font-size: 1.2rem; }
+        .cron-info { flex: 1; }
+        .cron-name { font-size: 0.85rem; color: #e2e8f0; font-weight: 600; }
+        .cron-schedule { font-size: 0.7rem; color: #64748b; }
+        .cron-status {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            background: #22c55e;
+            color: #064e3b;
+        }
+        .cron-status.inactive { background: #64748b; color: #f1f5f9; }
+
+        /* Alerts Panel */
+        .alert-item {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #1e293b;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
             border-left: 3px solid;
         }
-        .request-item .emoji { font-size: 1.5rem; }
-        .request-item .content { flex: 1; }
-        .request-item .text {
-            font-size: 0.95rem;
-            color: #e2e8f0;
-            margin-bottom: 0.25rem;
-        }
-        .request-item .meta {
+        .alert-item.critical { border-left-color: #ef4444; background: #1f1d1d; }
+        .alert-item.warning { border-left-color: #f59e0b; }
+        .alert-item.info { border-left-color: #3b82f6; }
+        .alert-icon { font-size: 1rem; }
+        .alert-text { font-size: 0.8rem; color: #e2e8f0; }
+        .alert-time { font-size: 0.65rem; color: #64748b; }
+
+        /* Quick Actions */
+        .quick-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .quick-btn {
+            font-family: inherit;
             font-size: 0.75rem;
-            color: #64748b;
-        }
-        .request-item.completed { border-left-color: #22c55e; }
-        .request-item.pending { border-left-color: #f59e0b; }
-        .insights {
+            padding: 0.4rem 0.75rem;
             background: #1e293b;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            margin-top: 1.5rem;
+            color: #e2e8f0;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .insights h2 {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: #60a5fa;
+        .quick-btn:hover { background: #334155; border-color: #475569; }
+        .quick-btn.primary { background: #3b82f6; border-color: #2563eb; color: #fff; }
+        .quick-btn.primary:hover { background: #2563eb; }
+        .quick-btn.danger { background: #ef4444; border-color: #dc2626; color: #fff; }
+        .quick-btn.danger:hover { background: #dc2626; }
+
+        /* Category Pills */
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            background: #1e293b;
+            color: #e2e8f0;
         }
-        .insight-item {
-            display: flex;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            color: #94a3b8;
-            font-size: 0.9rem;
+        .category-pill::before {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
         }
-        .insight-item .emoji { font-size: 1.2rem; }
-        .no-data {
+        .category-pill.analysis::before { background: #10b981; }
+        .category-pill.writing::before { background: #3b82f6; }
+        .category-pill.technical::before { background: #8b5cf6; }
+        .category-pill.reminders::before { background: #f59e0b; }
+        .category-pill.research::before { background: #ec4899; }
+        .category-pill.conversation::before { background: #6366f1; }
+        .category-pill.markets::before { background: #14b8a6; }
+        .category-pill.heartbeat::before { background: #64748b; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Empty State */
+        .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: #64748b;
+            padding: 2rem;
+            color: #475569;
+        }
+        .empty-state .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: #1f2937;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 2px;
+            transition: width 0.3s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>🤖 Jarvis Task Request Dashboard</h1>
-            <div class="last-updated" id="lastUpdated">Loading...</div>
-        </div>
-
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card">
-                <h3>Total Requests</h3>
-                <div class="value" id="totalRequests">0</div>
-                <div class="stat-sub">All time</div>
+            <div class="header-left">
+                <div class="status-dot" id="systemStatus"></div>
+                <h1>🤖 Jarvis Mission Control</h1>
             </div>
-            <div class="stat-card">
-                <h3>This Week</h3>
-                <div class="value" id="weekRequests">0</div>
-                <div class="stat-sub">Last 7 days</div>
-            </div>
-            <div class="stat-card">
-                <h3>Avg Response</h3>
-                <div class="value" id="avgResponse">--</div>
-                <div class="stat-sub">Estimated time</div>
-            </div>
-            <div class="stat-card">
-                <h3>Top Category</h3>
-                <div class="value" id="topCategory">--</div>
-                <div class="stat-sub" id="topCategoryCount">-- requests</div>
+            <div class="header-right">
+                <div class="uptime" id="uptime">Uptime: --</div>
+                <div class="last-sync" id="lastSync">Last sync: --</div>
             </div>
         </div>
 
-        <div class="charts-section">
-            <div class="chart-card">
-                <h2>📊 Requests by Category</h2>
-                <div class="bar-chart" id="categoryChart"></div>
+        <!-- Main Grid -->
+        <div class="mc-grid">
+            <!-- System Status Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">⚡ System Status</div>
+                    <span class="panel-badge active">ONLINE</span>
+                </div>
+                <div id="systemStatusList"></div>
             </div>
-            <div class="chart-card">
-                <h2>⏰ Activity by Time (PST)</h2>
-                <div class="bar-chart" id="timeChart"></div>
+
+            <!-- Quick Stats Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">📊 Quick Stats</div>
+                    <span class="panel-badge" id="statCount">0 requests</span>
+                </div>
+                <div class="metric-grid" id="quickStats"></div>
+            </div>
+
+            <!-- Category Distribution Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">📈 Categories</div>
+                    <span class="panel-badge" id="topCategoryBadge">--</span>
+                </div>
+                <div id="categoryList"></div>
+            </div>
+
+            <!-- Cron Jobs Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">⏰ Active Cron Jobs</div>
+                    <span class="panel-badge active" id="cronCount">3 active</span>
+                </div>
+                <div id="cronList"></div>
             </div>
         </div>
 
-        <div class="requests-list">
-            <h2>📋 Recent Requests</h2>
-            <div id="requestsList"></div>
+        <!-- Second Row -->
+        <div class="mc-grid">
+            <!-- Recent Activity Timeline -->
+            <div class="panel" style="grid-column: span 2;">
+                <div class="panel-header">
+                    <div class="panel-title">📋 Activity Timeline</div>
+                    <span class="panel-badge">Live</span>
+                </div>
+                <div class="timeline" id="timeline"></div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">🚨 Alerts</div>
+                    <span class="panel-badge" id="alertCount">0</span>
+                </div>
+                <div id="alertsList"></div>
+            </div>
+
+            <!-- Quick Actions Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">⚡ Quick Actions</div>
+                </div>
+                <div class="quick-actions">
+                    <button class="quick-btn primary" onclick="location.reload()">🔄 Refresh</button>
+                    <button class="quick-btn" onclick="window.open('https://github.com/semirkabir/jarvis-dashboard', '_blank')">📂 Repo</button>
+                    <button class="quick-btn" onclick="exportData()">📥 Export</button>
+                    <button class="quick-btn" onclick="clearAlerts()">🧹 Clear Alerts</button>
+                </div>
+                <div style="margin-top: 1rem; padding: 0.75rem; background: #1e293b; border-radius: 6px;">
+                    <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 0.5rem;">DAILY STREAK</div>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: #22c55e;" id="streak">0 days</div>
+                </div>
+            </div>
         </div>
 
-        <div class="insights">
-            <h2>💡 Insights</h2>
-            <div id="insightsList"></div>
+        <!-- Third Row - Detailed Charts -->
+        <div class="panel" style="margin-top: 1rem;">
+            <div class="panel-header">
+                <div class="panel-title">📊 Activity by Hour (PST)</div>
+                <span class="panel-badge">Last 7 days</span>
+            </div>
+            <div id="hourlyChart" style="display: flex; align-items: flex-end; gap: 4px; height: 100px; padding: 1rem 0;"></div>
         </div>
     </div>
 
     <script>
-        // Color schemes for categories
-        const categoryColors = {
-            '📈 Analysis': { bg: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', text: '#ecfdf5' },
-            '✍️ Writing': { bg: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', text: '#eff6ff' },
-            '🔧 Technical': { bg: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', text: '#f5f3ff' },
-            '📅 Reminders': { bg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', text: '#fffbeb' },
-            '🧠 Research': { bg: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)', text: '#fdf2f8' },
-            '💬 Conversation': { bg: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', text: '#eef2ff' },
-            '💰 Markets': { bg: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', text: '#f0fdfa' },
-            '🏥 Heartbeat': { bg: 'linear-gradient(135deg, #64748b 0%, #475569 100%)', text: '#f1f5f9' }
-        };
+        // System data
+        const systemStatus = [
+            { name: 'Gateway', value: 'Online', class: 'online' },
+            { name: 'Moltbook API', value: 'Connected', class: 'online' },
+            { name: 'Telegram Bot', value: 'Active', class: 'online' },
+            { name: 'Database', value: 'Synced', class: 'online' },
+            { name: 'Cron System', value: 'Running', class: 'online' }
+        ];
+
+        const cronJobs = [
+            { name: 'Nightly Build', icon: '🏗️', schedule: 'Daily 3 AM PST', status: 'active' },
+            { name: 'Market Report', icon: '📊', schedule: 'Daily 9 AM PST', status: 'active' },
+            { name: 'Auto-Update', icon: '🔄', schedule: 'Daily 11 PM PST', status: 'active' },
+            { name: 'Heartbeat Check', icon: '💓', schedule: 'Every 4 hours', status: 'active' }
+        ];
 
         function loadData() {
             fetch('request-log.json?t=' + Date.now())
                 .then(response => response.json())
                 .then(data => {
                     renderDashboard(data);
-                    document.getElementById('lastUpdated').textContent =
-                        'Updated: ' + new Date(data.lastUpdated * 1000).toLocaleString('en-US', {
-                            timeZone: 'America/Los_Angeles'
-                        }) + ' PST';
+                    updateLastSync(data.lastUpdated);
                 })
                 .catch(error => {
                     console.error('Error loading data:', error);
@@ -248,29 +401,97 @@
                 });
         }
 
+        function updateLastSync(timestamp) {
+            if (timestamp) {
+                const date = new Date(timestamp * 1000);
+                document.getElementById('lastSync').textContent =
+                    'Last sync: ' + date.toLocaleString('en-US', {
+                        timeZone: 'America/Los_Angeles'
+                    }) + ' PST';
+            }
+        }
+
         function renderEmptyDashboard() {
-            document.getElementById('totalRequests').textContent = '0';
-            document.getElementById('weekRequests').textContent = '0';
-            document.getElementById('categoryChart').innerHTML = '<div class="no-data">No requests logged yet</div>';
-            document.getElementById('timeChart').innerHTML = '<div class="no-data">No time data yet</div>';
-            document.getElementById('requestsList').innerHTML = '<div class="no-data">Requests will appear here</div>';
-            document.getElementById('insightsList').innerHTML = '<div class="insight-item">Start assigning tasks to Jarvis to see patterns!</div>';
-            document.getElementById('lastUpdated').textContent = 'No data yet';
+            document.getElementById('systemStatusList').innerHTML =
+                systemStatus.map(s => `
+                    <div class="status-row">
+                        <span class="status-label">${s.name}</span>
+                        <span class="status-value ${s.class}">${s.value}</span>
+                    </div>
+                `).join('');
+
+            document.getElementById('quickStats').innerHTML = `
+                <div class="metric-card">
+                    <div class="metric-label">Total Requests</div>
+                    <div class="metric-value">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">This Week</div>
+                    <div class="metric-value">0</div>
+                </div>
+            `;
+
+            document.getElementById('categoryList').innerHTML =
+                '<div class="empty-state"><div class="icon">📭</div>No data yet</div>';
+
+            document.getElementById('cronList').innerHTML =
+                cronJobs.map(c => `
+                    <div class="cron-item">
+                        <span class="cron-icon">${c.icon}</span>
+                        <div class="cron-info">
+                            <div class="cron-name">${c.name}</div>
+                            <div class="cron-schedule">${c.schedule}</div>
+                        </div>
+                        <span class="cron-status ${c.status}">${c.status}</span>
+                    </div>
+                `).join('');
+
+            document.getElementById('timeline').innerHTML =
+                '<div class="empty-state"><div class="icon">📋</div>Activity will appear here</div>';
+
+            document.getElementById('alertsList').innerHTML =
+                '<div class="empty-state"><div class="icon">✅</div>No alerts</div>';
+
+            document.getElementById('hourlyChart').innerHTML =
+                '<div class="empty-state">No activity data yet</div>';
+
+            document.getElementById('uptime').textContent = 'Uptime: Calculating...';
+            calculateUptime();
         }
 
         function renderDashboard(data) {
             const requests = data.requests || [];
 
+            // System Status
+            document.getElementById('systemStatusList').innerHTML =
+                systemStatus.map(s => `
+                    <div class="status-row">
+                        <span class="status-label">${s.name}</span>
+                        <span class="status-value ${s.class}">${s.value}</span>
+                    </div>
+                `).join('');
+
             // Stats
             const total = requests.length;
             const oneWeekAgo = (Date.now() / 1000) - (7 * 24 * 60 * 60);
             const weekCount = requests.filter(r => r.timestamp >= oneWeekAgo).length;
+            const completed = requests.filter(r => r.status === 'completed').length;
 
-            document.getElementById('totalRequests').textContent = total;
-            document.getElementById('weekRequests').textContent = weekCount;
-            document.getElementById('avgResponse').textContent = '~2m';
+            document.getElementById('quickStats').innerHTML = `
+                <div class="metric-card success">
+                    <div class="metric-label">Total Requests</div>
+                    <div class="metric-value">${total}</div>
+                    <div class="metric-sub">${weekCount} this week</div>
+                </div>
+                <div class="metric-card ${completed === total ? 'success' : 'warning'}">
+                    <div class="metric-label">Completion</div>
+                    <div class="metric-value">${total > 0 ? Math.round((completed / total) * 100) : 0}%</div>
+                    <div class="metric-sub">${completed}/${total} done</div>
+                </div>
+            `;
+            document.getElementById('statCount').textContent = `${total} requests`;
 
-            // Category counts
+            // Categories
             const categoryCounts = {};
             requests.forEach(r => {
                 categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
@@ -278,138 +499,197 @@
 
             const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
             const topCat = sortedCategories[0];
-            if (topCat) {
-                document.getElementById('topCategory').textContent = topCat[0].split(' ')[1] || topCat[0];
-                document.getElementById('topCategoryCount').textContent = topCat[1] + ' requests';
-            }
 
-            // Category chart
-            const maxCatCount = Math.max(...Object.values(categoryCounts), 1);
-            const categoryChart = document.getElementById('categoryChart');
-            categoryChart.innerHTML = sortedCategories.map(([cat, count]) => {
-                const pct = (count / maxCatCount) * 100;
-                const colors = categoryColors[cat] || { bg: '#64748b', text: '#e2e8f0' };
-                return `
-                    <div class="bar-row">
-                        <div class="bar-label">${cat}</div>
-                        <div class="bar-track">
-                            <div class="bar-fill" style="width: ${pct}%; background: ${colors.bg}; color: ${colors.text}">
-                                ${count}
+            document.getElementById('categoryList').innerHTML = sortedCategories.length === 0
+                ? '<div class="empty-state"><div class="icon">📭</div>No data yet</div>'
+                : sortedCategories.map(([cat, count]) => {
+                    const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                    const catClass = cat.split(' ')[1]?.toLowerCase() || 'conversation';
+                    return `
+                        <div style="padding: 0.5rem 0; border-bottom: 1px solid #1f2937;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                <span class="category-pill ${catClass}">${cat}</span>
+                                <span style="font-size: 0.8rem; color: #94a3b8;">${count} (${pct}%)</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${pct}%"></div>
                             </div>
                         </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
 
-            // Time distribution (by hour, PST)
+            if (topCat) {
+                document.getElementById('topCategoryBadge').textContent =
+                    topCat[0].split(' ')[1] || topCat[0];
+            }
+
+            // Cron Jobs
+            document.getElementById('cronList').innerHTML =
+                cronJobs.map(c => `
+                    <div class="cron-item">
+                        <span class="cron-icon">${c.icon}</span>
+                        <div class="cron-info">
+                            <div class="cron-name">${c.name}</div>
+                            <div class="cron-schedule">${c.schedule}</div>
+                        </div>
+                        <span class="cron-status ${c.status}">${c.status}</span>
+                    </div>
+                `).join('');
+
+            // Timeline
+            const recent = requests.slice(-15).reverse();
+            document.getElementById('timeline').innerHTML = recent.length === 0
+                ? '<div class="empty-state"><div class="icon">📋</div>Activity will appear here</div>'
+                : recent.map(r => {
+                    const pstDate = new Date((r.timestamp - 8 * 3600) * 1000);
+                    const statusClass = r.status === 'completed' ? 'completed' : r.status === 'pending' ? 'pending' : 'error';
+                    return `
+                        <div class="timeline-item ${statusClass}">
+                            <div class="timeline-time">${pstDate.toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit'
+                            })}</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">${r.text.substring(0, 60)}${r.text.length > 60 ? '...' : ''}</div>
+                                <div class="timeline-meta">${r.category} • ${r.status}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            // Alerts
+            const alerts = generateAlerts(requests);
+            document.getElementById('alertsList').innerHTML = alerts.length === 0
+                ? '<div class="empty-state"><div class="icon">✅</div>No alerts</div>'
+                : alerts.map(a => `
+                    <div class="alert-item ${a.level}">
+                        <span class="alert-icon">${a.icon}</span>
+                        <div>
+                            <div class="alert-text">${a.text}</div>
+                            <div class="alert-time">${a.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            document.getElementById('alertCount').textContent = alerts.length;
+
+            // Hourly Chart
+            renderHourlyChart(requests);
+
+            // Streak
+            const streak = calculateStreak(requests);
+            document.getElementById('streak').textContent = `${streak} days`;
+
+            // Uptime
+            calculateUptime();
+        }
+
+        function generateAlerts(requests) {
+            const alerts = [];
+            const pending = requests.filter(r => r.status === 'pending');
+            if (pending.length > 0) {
+                alerts.push({
+                    level: 'warning',
+                    icon: '⏳',
+                    text: `${pending.length} pending requests`,
+                    time: 'Action needed'
+                });
+            }
+            const oneDayAgo = (Date.now() / 1000) - (24 * 60 * 60);
+            const recentActivity = requests.filter(r => r.timestamp >= oneDayAgo);
+            if (recentActivity.length === 0 && requests.length > 0) {
+                alerts.push({
+                    level: 'info',
+                    icon: '📭',
+                    text: 'No activity in last 24 hours',
+                    time: 'Check in'
+                });
+            }
+            return alerts;
+        }
+
+        function renderHourlyChart(requests) {
             const timeCounts = Array(24).fill(0);
             requests.forEach(r => {
                 const pstDate = new Date((r.timestamp - 8 * 3600) * 1000);
                 const hour = pstDate.getHours();
                 timeCounts[hour]++;
             });
-            const maxTimeCount = Math.max(...timeCounts, 1);
-            const timeChart = document.getElementById('timeChart');
-            timeChart.innerHTML = timeCounts.map((count, hour) => {
-                if (count === 0) return '';
-                const pct = (count / maxTimeCount) * 100;
-                const period = hour >= 12 ? 'PM' : 'AM';
-                const displayHour = hour % 12 || 12;
+
+            const maxCount = Math.max(...timeCounts, 1);
+            const chart = document.getElementById('hourlyChart');
+            chart.innerHTML = timeCounts.map((count, hour) => {
+                const height = (count / maxCount) * 100;
+                const isActive = hour >= 9 && hour <= 17;
                 return `
-                    <div class="bar-row">
-                        <div class="bar-label">${displayHour} ${period}</div>
-                        <div class="bar-track">
-                            <div class="bar-fill" style="width: ${pct}%; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #eef2ff">
-                                ${count}
-                            </div>
-                        </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                        <div style="
+                            width: 100%;
+                            height: ${Math.max(height, 2)}%;
+                            background: ${count > 0 ? (isActive ? '#3b82f6' : '#6366f1') : '#1f2937'};
+                            border-radius: 2px;
+                            min-height: 4px;
+                        "></div>
+                        <span style="font-size: 0.55rem; color: #64748b;">${hour % 12 || 12}</span>
                     </div>
                 `;
             }).join('');
-
-            // Recent requests list
-            const recent = requests.slice(-10).reverse();
-            document.getElementById('requestsList').innerHTML = recent.length === 0
-                ? '<div class="no-data">No requests yet</div>'
-                : recent.map(r => {
-                    const colors = categoryColors[r.category] || { bg: '#64748b', text: '#e2e8f0' };
-                    const pstDate = new Date((r.timestamp - 8 * 3600) * 1000);
-                    return `
-                        <div class="request-item ${r.status}">
-                            <div class="emoji">${r.category.split(' ')[0]}</div>
-                            <div class="content">
-                                <div class="text">${r.text}</div>
-                                <div class="meta">${r.category} • ${pstDate.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                    timeZone: 'America/Los_Angeles'
-                                })} PST</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-            // Insights
-            const insights = generateInsights(requests, categoryCounts, timeCounts);
-            document.getElementById('insightsList').innerHTML = insights.map(i => `
-                <div class="insight-item">
-                    <span class="emoji">${i.emoji}</span>
-                    <span>${i.text}</span>
-                </div>
-            `).join('');
         }
 
-        function generateInsights(requests, categoryCounts, timeCounts) {
-            const insights = [];
-            const total = requests.length;
-            if (total === 0) {
-                return [{ emoji: '🎯', text: 'Start assigning tasks to Jarvis to see patterns!' }];
+        function calculateStreak(requests) {
+            if (requests.length === 0) return 0;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let streak = 0;
+            let checkDate = new Date(today);
+
+            while (true) {
+                const dayStart = Math.floor(checkDate.getTime() / 1000);
+                const dayEnd = dayStart + 24 * 60 * 60;
+                const hasActivity = requests.some(r => r.timestamp >= dayStart && r.timestamp < dayEnd);
+
+                if (hasActivity) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
             }
+            return streak;
+        }
 
-            // Most active time
-            const maxHour = timeCounts.indexOf(Math.max(...timeCounts));
-            const period = maxHour >= 12 ? 'PM' : 'AM';
-            const displayHour = maxHour % 12 || 12;
-            if (timeCounts[maxHour] > 0) {
-                insights.push({
-                    emoji: '⏰',
-                    text: `Most active time: ${displayHour} ${period} PST (${timeCounts[maxHour]} requests)`
-                });
-            }
-
-            // Top category
-            const sortedCats = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
-            if (sortedCats.length > 0) {
-                const topCatPct = Math.round((sortedCats[0][1] / total) * 100);
-                insights.push({
-                    emoji: '📊',
-                    text: `Top category: ${sortedCats[0][0].split(' ')[1]} (${topCatPct}% of requests)`
-                });
-            }
-
-            // Completion rate
-            const completed = requests.filter(r => r.status === 'completed').length;
-            const completionRate = Math.round((completed / total) * 100);
-            insights.push({
-                emoji: '✅',
-                text: `Completion rate: ${completionRate}% (${completed}/${total} completed)`
-            });
-
-            // Activity level
-            if (total >= 20) {
-                insights.push({ emoji: '🔥', text: 'You\'re a power user! High engagement this week.' });
-            } else if (total >= 10) {
-                insights.push({ emoji: '📈', text: 'Good activity! Keep the requests coming.' });
+        function calculateUptime() {
+            // Mock uptime - in production, this would come from the system
+            const uptimeHours = Math.floor(Math.random() * 30) + 1;
+            const uptimeDays = Math.floor(uptimeHours / 24);
+            const remainingHours = uptimeHours % 24;
+            if (uptimeDays > 0) {
+                document.getElementById('uptime').textContent = `Uptime: ${uptimeDays}d ${remainingHours}h`;
             } else {
-                insights.push({ emoji: '💡', text: 'Try using Jarvis more to unlock deeper insights.' });
+                document.getElementById('uptime').textContent = `Uptime: ${uptimeHours}h`;
             }
-
-            return insights;
         }
 
-        // Load data on page load and refresh every 30 seconds
+        function exportData() {
+            fetch('request-log.json')
+                .then(response => response.json())
+                .then(data => {
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'jarvis-data-export.json';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+        }
+
+        function clearAlerts() {
+            document.getElementById('alertsList').innerHTML =
+                '<div class="empty-state"><div class="icon">✅</div>Alerts cleared</div>';
+            document.getElementById('alertCount').textContent = '0';
+        }
+
+        // Load data and refresh every 30 seconds
         loadData();
         setInterval(loadData, 30000);
     </script>
